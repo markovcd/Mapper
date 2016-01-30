@@ -6,7 +6,7 @@ namespace Mapper
 	{
 		public static void Main(string[] args)
 		{
-			var f = File.LoadXml(@"Mappings\Biała2.xml");
+			var f = File.LoadXml(@"Mappings\Biała.xml");
 
             var m = new FileConstructor(@"C:\Users\Arek\Desktop\mapper\Baza", "biala.xlsx", f);
 
