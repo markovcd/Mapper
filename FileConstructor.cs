@@ -58,29 +58,30 @@ namespace Mapper
 		
 		public void AddFiles(DateTime from, DateTime to)
 		{
-			if (from > to) throw new ArgumentException();
-			
-			for (var d = from; d <= to; d = d.AddDays(1)) AddFile(d);
+			foreach (var f in file.InputFileInfo.ConstructPaths(SourceDirectory, from, to))
+                AddFile(f.Key, f.Value);
 		}
 		
-		public void AddFile(DateTime date)
+		public void AddFile(DateTime date, string filePath)
 		{
-            var inputPath = new FileInfo(file.InputFileInfo.ConstructPath(SourceDirectory, date));
+            var inputFile = new FileInfo(filePath);
 
-            using (var input = new ExcelPackage(inputPath))
+            using (var input = new ExcelPackage(inputFile))
             {               
-                Console.WriteLine(inputPath);
+                Console.WriteLine(filePath);
 
-                foreach (var card in file.Cards) UpdateSampleRows(card);
-                foreach (var card in file.Cards) AddCard(card, input.Workbook, date);
+                foreach (var card in file.Cards)
+                    AddCard(card, input.Workbook, date);
             }
 		}
 	
 		public void AddCard(Card card, ExcelWorkbook inputWorkbook, DateTime date)
 		{
-			var inputWorksheet = card.GetInputWorksheet(inputWorkbook);		
-			
-			foreach (var sample in card.Samples)
+			var inputWorksheet = card.GetInputWorksheet(inputWorkbook);
+
+            UpdateSampleRows(card);
+
+            foreach (var sample in card.Samples)
 				AddSample(sample, inputWorksheet, date);
 		}
 	

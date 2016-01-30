@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DateEnumerable.cs" />
     <Compile Include="Entities\Card.cs" />
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Mapping.cs" />

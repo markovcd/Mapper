@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Mapper
 {
-	public enum Period { Daily, Monthly }
+	
 	
 	/// <summary>
 	/// Description of SheetInfo.
@@ -31,5 +31,11 @@ namespace Mapper
 		{
 			return PathNormalizer.Normalize(rootPath + Path.DirectorySeparatorChar + date.ToString(Pattern));
 		}
+
+	    public Dictionary<DateTime, string> ConstructPaths(string rootPath, DateTime from, DateTime to)
+	    {
+            var dates = new DateEnumerable(Period, from, to);
+	        return dates.ToDictionary(d => d, d => ConstructPath(rootPath, d));
+	    }
 	}
 }
