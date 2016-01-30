@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using OfficeOpenXml;
 
@@ -25,7 +26,10 @@ namespace Mapper
 	
 		public ExcelWorksheet GetInputWorksheet(ExcelWorkbook workbook)
 		{
-			return workbook.Worksheets[Name];
+            if (workbook.Worksheets[Name] == null)
+                throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0} w pliku wejściowym.", Name));
+
+            return workbook.Worksheets[Name];
 		}
 		
 		public Card()

@@ -79,7 +79,10 @@ namespace Mapper
 		
 		public ExcelWorksheet GetOutputWorksheet(ExcelWorkbook workbook)
 		{
-			return workbook.Worksheets[GetFullCardName()];
+            if (workbook.Worksheets[GetFullCardName()] == null)
+                throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0} w pliku wyjściowym.", Name));
+
+            return workbook.Worksheets[GetFullCardName()];
 		}
 	
 		public string GetFullCardName()
