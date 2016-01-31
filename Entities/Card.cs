@@ -18,8 +18,11 @@ namespace Mapper
 		
 		[XmlAttribute]
 		public int TargetFirstRow { get; set; }
-	
-		[XmlIgnore]
+
+        [XmlAttribute]
+        public bool AddDateSeparator { get; set; }
+
+        [XmlIgnore]
 		public File File { get; set; }
 
         public List<Sample> Samples { get; set; }
@@ -36,6 +39,7 @@ namespace Mapper
 		{
 			TargetFirstRow = 6;
 			TargetDateColumn = "A";
+		    AddDateSeparator = true;
 		}
 		
 		public ExcelRange GetDateCell(int row, ExcelWorksheet worksheet)
