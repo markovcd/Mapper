@@ -13,7 +13,7 @@ namespace Mapper
 	{
 		private readonly ExcelPackage output;
 		private readonly File file;
-		private readonly Dictionary<string, int> lastRows;
+		private readonly Dictionary<Sample, int> lastRows;
 	
 		public string SourceDirectory { get; private set; }
 		public string TargetPath { get; private set; }	
@@ -31,17 +31,16 @@ namespace Mapper
             lastRows = InitSampleRows(append);
 		}
 		
-		private Dictionary<string, int> InitSampleRows(bool append = false)
+		private Dictionary<Sample, int> InitSampleRows(bool append = false)
 		{
-			var d = new Dictionary<string, int>();
+			var d = new Dictionary<Sample, int>();
 	
 			foreach (var card in file.Cards)
 			foreach (var sample in card.Samples)
 			{	
-				var identifier = sample.GetIdentifier();
-				if (d.ContainsKey(identifier)) continue;
+				if (d.ContainsKey(sample)) continue;
 				var row = append ? FindLastRow(sample) : card.TargetFirstRow;
-				d.Add(identifier, row);
+				d.Add(sample, row);
 			}					
 			
 			return d;
@@ -49,20 +48,16 @@ namespace Mapper
 		
 		private void UpdateSampleRows(Card card)
 		{
-			var max = card.Samples
-			              .GroupBy(s => s.Page)
-						  .ToDictionary(
-						      g => g.Key, 
-						  	  g => g.Max(s => lastRows[s.GetIdentifier()]));
-			
+			var max = card.Samples.Max(s => GetLastRow(s));
+			              
 			foreach (var sample in card.Samples)
-				lastRows[sample.GetIdentifier()] = max[sample.Page];
+				lastRows[sample] = max;
 		}
 		
 
 		public int FindLastRow(Sample sample)
 		{
-			var worksheet = sample.GetOutputWorksheet(output.Workbook);
+			var worksheet = sample.Card.GetTargetWorksheet(output.Workbook);
 
             for (var row = worksheet.Dimension.Rows; row > sample.Card.TargetFirstRow; row--)
                 if (!sample.Card.IsTargetRowEmpty(row, worksheet))
@@ -81,60 +76,60 @@ namespace Mapper
 		public void AddFile(DateTime date, string filePath)
 		{
             var inputFile = new FileInfo(filePath);
-            if (!inputFile.Exists) throw new FileNotFoundException(string.Format("Nie znaleziono pliku {0}", filePath));
+            
+            if (!inputFile.Exists) 
+            	throw new FileNotFoundException(string.Format("Nie znaleziono pliku {0}", filePath));
 
-            using (var input = new ExcelPackage(inputFile))
+            using (var source = new ExcelPackage(inputFile))
             {               
                 Console.WriteLine(filePath);
 
                 foreach (var card in file.Cards)
-                    AddCard(card, input.Workbook, date);
+                    AddCard(card, source.Workbook, date);
             }
 		}
 	
-		public void AddCard(Card card, ExcelWorkbook inputWorkbook, DateTime date)
+		public void AddCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)
 		{
-			var inputWorksheet = card.GetInputWorksheet(inputWorkbook);
+			var targetWorksheet = card.GetTargetWorksheet(output.Workbook);
 
             UpdateSampleRows(card);
 
             foreach (var sample in card.Samples)
-				AddSample(sample, inputWorksheet, date);
+				AddSample(sample, sample.GetSourceWorksheet(sourceWorkbook), targetWorksheet, date);
 		}
 	
-		public void AddSample(Sample sample, ExcelWorksheet inputWorksheet, DateTime date)
+		public void AddSample(Sample sample, ExcelWorksheet sourceWorksheet, ExcelWorksheet targetWorksheet, DateTime date)
 		{
-			var outputWorksheet = sample.GetOutputWorksheet(output.Workbook);
-
 		    var from = sample.GetSourceFromNumber();
             var to = sample.GetSourceToNumber();
 		    var count = to - from + 1;
 
-            foreach (var i in Enumerable.Range(from, count).Where(i => !sample.IsSourceEmpty(i, inputWorksheet)))
-                AddSample(sample, inputWorksheet, outputWorksheet, date, i);
+            foreach (var i in Enumerable.Range(from, count).Where(i => !sample.IsSourceEmpty(i, sourceWorksheet)))
+                AddSample(sample, sourceWorksheet, targetWorksheet, date, i);
 		}
 
-	    public void AddSample(Sample sample, ExcelWorksheet inputWorksheet, ExcelWorksheet outputWorksheet, DateTime date, int index)
+	    public void AddSample(Sample sample, ExcelWorksheet sourceWorksheet, ExcelWorksheet targetWorksheet, DateTime date, int index)
 	    {
             if (GetLastRow(sample) > sample.Card.TargetFirstRow)
-                AddNextRow(sample, outputWorksheet);
+                AddNextRow(sample, targetWorksheet);
 
-            FillDate(date, outputWorksheet, sample);
+            FillDate(date, targetWorksheet, sample);
 
             foreach (var mapping in sample.Mappings)
-                AddMapping(mapping, inputWorksheet, outputWorksheet, index);
+                AddMapping(mapping, sourceWorksheet, targetWorksheet, index);
 
 	        IncreaseLastRow(sample);
 	    }
 
         public int GetLastRow(Sample sample)
 		{
-			return lastRows[sample.GetIdentifier()];
+			return lastRows[sample];
 		}
 
 	    public void IncreaseLastRow(Sample sample)
 	    {
-	        lastRows[sample.GetIdentifier()]++;
+	        lastRows[sample]++;
 	    }
 
 	    public void AddNextRow(Sample sample, ExcelWorksheet worksheet)
@@ -150,9 +145,9 @@ namespace Mapper
 		    sample.Card.GetDateCell(GetLastRow(sample), worksheet).Value = date;
 		}
 	
-		public void AddMapping(Mapping mapping, ExcelWorksheet inputWorksheet, ExcelWorksheet outputWorksheet, int index)
+		public void AddMapping(Mapping mapping, ExcelWorksheet sourceWorksheet, ExcelWorksheet targetWorksheet, int index)
 		{
-			var target = mapping.GetTargetCell(GetLastRow(mapping.Sample), outputWorksheet);
+			var target = mapping.GetTargetCell(GetLastRow(mapping.Sample), targetWorksheet);
 			
 			var contentMapping = mapping as ContentMapping;
 			var movableMapping = mapping as MovableMapping;
@@ -161,15 +156,14 @@ namespace Mapper
 			if (contentMapping != null)
 				target.Value = contentMapping.GetValue();
 			else if (movableMapping != null)
-				target.Value = movableMapping.GetValue(index, inputWorksheet);
+				target.Value = movableMapping.GetValue(index, sourceWorksheet);
 			else if (cellMapping != null)
-				target.Value = cellMapping.GetValue(inputWorksheet);
+				target.Value = cellMapping.GetValue(sourceWorksheet);
 		}
 		
 		private void Protect()
 		{
-			var worksheets = file.Cards.SelectMany(c => c.Samples)
-				                       .Select(s => s.GetOutputWorksheet(output.Workbook));
+			var worksheets = file.Cards.Select(c => c.GetTargetWorksheet(output.Workbook));
 			
 			foreach (var worksheet in worksheets) 
 			{

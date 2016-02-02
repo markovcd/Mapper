@@ -23,17 +23,12 @@ namespace Mapper
 	
 		[XmlAttribute]
 		public string SourceTo { get; set; }
-	
+		
 		[XmlAttribute]
-		public int Page { get; set; }		
+		public string SourceCardName { get; set; }		
 	
 		[XmlIgnore]
 		public Card Card { get; set; }
-
-        public Sample()
-		{
-			Page = 1;
-		}
 
         public int GetSourceFromNumber()
         {
@@ -45,11 +40,6 @@ namespace Mapper
             return ExcelHelper.ColumnLetterToInt(SourceTo);
         }
 
-        public string GetIdentifier()
-		{
-			return string.Format("{0}.{1}", GetFullCardName(), Name);
-		}
-		
 		public bool IsSourceEmpty(int index, ExcelWorksheet worksheet)
 		{	
 			switch (GetSampleType())
@@ -76,20 +66,20 @@ namespace Mapper
 			               .Select(m => m.IsSourceValuePresent(row, worksheet))
 						   .All(b => !b);			
 		}
-		
-		public ExcelWorksheet GetOutputWorksheet(ExcelWorkbook workbook)
+			
+		public string GetSourceCardName()
 		{
-            if (workbook.Worksheets[GetFullCardName()] == null)
-                throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0} w pliku wyjściowym.", Name));
+			return string.IsNullOrEmpty(SourceCardName) ? Card.Name : SourceCardName;
+		}
+		
+		public ExcelWorksheet GetSourceWorksheet(ExcelWorkbook workbook)
+		{		
+			if (workbook.Worksheets[GetSourceCardName()] == null)
+                throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0} w pliku wejściowym.", Name));
 
-            return workbook.Worksheets[GetFullCardName()];
+			return workbook.Worksheets[GetSourceCardName()];
 		}
 	
-		public string GetFullCardName()
-		{
-		    return Page == 1 ? Card.Name : string.Format("{0}_{1}", Card.Name, Page);
-		}
-
         public SampleType GetSampleType()
 		{
 		    var rowMappingCount = Mappings.OfType<RowMapping>().Count();
@@ -100,5 +90,41 @@ namespace Mapper
 
             throw new InvalidOperationException("Nie można łączyć odwołań kolumnowych i wierszowych.");
 		}
+        
+        #region Equals and GetHashCode implementation
+        public override int GetHashCode()
+		{
+			int hashCode = 0;
+			
+			unchecked
+			{
+				hashCode += 1000000007 * Card.Name.GetHashCode();
+				hashCode += 1000000009 * Name.GetHashCode();
+			}
+			
+			return hashCode;
+		}
+        
+		public override bool Equals(object obj)
+		{
+			Sample other = obj as Sample;
+			if (other == null) return false;
+			return GetHashCode().Equals(other.GetHashCode());
+		}
+        
+		public static bool operator ==(Sample lhs, Sample rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))
+				return true;
+			if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
+				return false;
+			return lhs.Equals(rhs);
+		}
+        
+		public static bool operator !=(Sample lhs, Sample rhs)
+		{
+			return !(lhs == rhs);
+		}
+        #endregion
 	}
 }

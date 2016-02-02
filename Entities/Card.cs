@@ -11,10 +11,7 @@ namespace Mapper
 	public class Card
 	{
 		[XmlAttribute]
-		public string /*Target*/Name { get; set; }
-	
-	  //[XmlAttribute]
-		//public string SourceName { get; set; }
+		public string Name { get; set; }
 	
 		[XmlAttribute]
 		public string TargetDateColumn { get; set; }
@@ -22,35 +19,24 @@ namespace Mapper
 		[XmlAttribute]
 		public int TargetFirstRow { get; set; }
 
-        [XmlAttribute]
-        public bool AddDateSeparator { get; set; }
-
         [XmlIgnore]
 		public File File { get; set; }
 
         public List<Sample> Samples { get; set; }
 	
-		public ExcelWorksheet GetInputWorksheet(ExcelWorkbook workbook)
-		{
-            return GetWorksheet(workbook, Name);
-		}
 		
-		/*GetSourceWorksheet(ExcelWorkbook workbook)*/
-		/*GetTargetWorksheet(ExcelWorkbook workbook)*/
-		
-		public static ExcelWorksheet GetWorksheet(ExcelWorkbook workbook, string name)
+		public ExcelWorksheet GetTargetWorksheet(ExcelWorkbook workbook)
 		{
-            if (workbook.Worksheets[name] == null)
-                throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0}.", name));
+            if (workbook.Worksheets[Name] == null)
+                throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0} w pliku wyjściowym.", Name));
 
-            return workbook.Worksheets[name];
+            return workbook.Worksheets[Name];
 		}
 		
 		public Card()
 		{
 			TargetFirstRow = 6;
 			TargetDateColumn = "A";
-		    AddDateSeparator = true;
 		}
 		
 		public ExcelRange GetDateCell(int row, ExcelWorksheet worksheet)
