@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 # SharpDevelop 4.4
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapper", "Mapper.csproj", "{1E894661-2A35-4898-A998-6DD9FF8B4E13}"
 EndProject
 Global
@@ -10,9 +12,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

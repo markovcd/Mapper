@@ -11,7 +11,10 @@ namespace Mapper
 	public class Card
 	{
 		[XmlAttribute]
-		public string Name { get; set; }
+		public string /*Target*/Name { get; set; }
+	
+	  //[XmlAttribute]
+		//public string SourceName { get; set; }
 	
 		[XmlAttribute]
 		public string TargetDateColumn { get; set; }
@@ -29,10 +32,18 @@ namespace Mapper
 	
 		public ExcelWorksheet GetInputWorksheet(ExcelWorkbook workbook)
 		{
-            if (workbook.Worksheets[Name] == null)
-                throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0} w pliku wejściowym.", Name));
+            return GetWorksheet(workbook, Name);
+		}
+		
+		/*GetSourceWorksheet(ExcelWorkbook workbook)*/
+		/*GetTargetWorksheet(ExcelWorkbook workbook)*/
+		
+		public static ExcelWorksheet GetWorksheet(ExcelWorkbook workbook, string name)
+		{
+            if (workbook.Worksheets[name] == null)
+                throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0}.", name));
 
-            return workbook.Worksheets[Name];
+            return workbook.Worksheets[name];
 		}
 		
 		public Card()
@@ -54,7 +65,7 @@ namespace Mapper
 
         public bool IsTargetRowEmpty(int row, ExcelWorksheet worksheet)
         {
-            return ExcelHelper.IsValuePresent(GetDateCell(row, worksheet));
+            return !ExcelHelper.IsValuePresent(GetDateCell(row, worksheet));
         }
     }
 }

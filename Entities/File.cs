@@ -11,6 +11,10 @@ namespace Mapper
 	{
 		[XmlAttribute]
 		public string Name { get; set; }
+		
+		[XmlAttribute]
+		public string Password { get; set; }
+		
 		public List<Card> Cards { get; set; }
 	
 		public SheetInfo InputFileInfo { get; set; }

@@ -84,10 +84,10 @@ namespace Mapper
 
         private static string AddConditionalFormattingRow(string ranges)
         {
-            return ranges.Split(';')
+            return ranges.Split(' ')
                          .Select(Range.Parse)
                          .Select(r => r.AddRow().ToString())
-                         .Aggregate((s1, s2) => s1 + ";" + s2);
+                         .Aggregate((s1, s2) => s1 + " " + s2);
         }
 
         private static IEnumerable<XmlNode> GetConditionalFormattingNodes(ExcelWorksheet worksheet)
