@@ -7,8 +7,6 @@ using System.Linq;
 
 namespace Mapper
 {
-	
-	
 	class Program
 	{	
 		public static void Main(string[] args)
@@ -21,6 +19,12 @@ namespace Mapper
 			
 			if (DateTime.TryParseExact(cfg, "yyyy-MM", CultureInfo.CurrentCulture, DateTimeStyles.None, out date))
 				cfg = "Configs\\" + cfg + ".xml";
+			
+			if (!System.IO.File.Exists(cfg))
+				cfg = "Configs\\" + cfg;
+			
+			if (!System.IO.File.Exists(cfg))
+				cfg = cfg + ".xml";
 			    
 			using(var xml = new StreamReader(cfg))
 			{
