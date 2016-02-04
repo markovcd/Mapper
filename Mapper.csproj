@@ -68,9 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="Config.cs" />
     <Compile Include="DateEnumerable.cs" />
     <Compile Include="Entities\Card.cs" />
     <Compile Include="Entities\File.cs" />
