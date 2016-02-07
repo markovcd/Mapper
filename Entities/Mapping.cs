@@ -20,7 +20,12 @@ namespace Mapper
 		{	
 			return GetSourceCell(worksheet).Value;
 		}
-	}
+
+        public bool IsSourceValuePresent(ExcelWorksheet worksheet)
+        {
+            return !IsIgnorable && ExcelHelper.IsValuePresent(GetSourceCell(worksheet));
+        }
+    }
 	
 	/// <summary>
 	/// Description of RowMapping.
@@ -34,7 +39,7 @@ namespace Mapper
 		{
 			return worksheet.Cells[SourceRow, column];
 		}
-	}
+    }
 	
 	/// <summary>
 	/// Description of ColumnMapping.
@@ -57,9 +62,7 @@ namespace Mapper
 
     public abstract class MovableMapping : Mapping
     {
-        [XmlAttribute]
-        public bool IsIgnorable { get; set; }
-
+       
         public abstract ExcelRange GetSourceCell(int index, ExcelWorksheet worksheet);
 
         public object GetValue(int index, ExcelWorksheet worksheet)
@@ -84,10 +87,6 @@ namespace Mapper
 		}
 	}
 	
-	[XmlInclude(typeof(RowMapping))]
-	[XmlInclude(typeof(ColumnMapping))]
-	[XmlInclude(typeof(CellMapping))]
-	[XmlInclude(typeof(ContentMapping))]
 	public abstract class Mapping
 	{
 		[XmlAttribute]
@@ -95,8 +94,11 @@ namespace Mapper
 	
 		[XmlAttribute]
 		public string TargetColumn { get; set; }
-		
-		[XmlIgnore]
+
+        [XmlAttribute]
+        public bool IsIgnorable { get; set; }
+
+        [XmlIgnore]
 		public Sample Sample { get; set; }
 	
 		public ExcelRange GetTargetCell(int row, ExcelWorksheet worksheet)

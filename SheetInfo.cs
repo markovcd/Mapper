@@ -6,8 +6,6 @@ using System.IO;
 
 namespace Mapper
 {
-	
-	
 	/// <summary>
 	/// Description of SheetInfo.
 	/// </summary>
@@ -21,15 +19,16 @@ namespace Mapper
 		
 		[XmlAttribute]
 		public string Password { get; set; }
-	
-		public string ConstructPath(string rootPath)
+
+	    private static string NormalizePath(string path)
+	    {
+	        return Path.GetFullPath(new Uri(path).LocalPath)
+	            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+	    }
+
+	    public string ConstructPath(string rootPath, DateTime date)
 		{
-			return PathNormalizer.Normalize(rootPath + Path.DirectorySeparatorChar + PathNormalizer.CleanQuotes(Pattern));
-		}
-		
-		public string ConstructPath(string rootPath, DateTime date)
-		{
-			return PathNormalizer.Normalize(rootPath + Path.DirectorySeparatorChar + date.ToString(Pattern));
+			return NormalizePath(rootPath + Path.DirectorySeparatorChar + date.ToString(Pattern));
 		}
 
 	    public Dictionary<DateTime, string> ConstructPaths(string rootPath, DateTime from, DateTime to)

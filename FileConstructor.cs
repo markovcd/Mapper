@@ -25,7 +25,6 @@ namespace Mapper
 	
 			this.file = file;
 		    
-
 			output = new ExcelPackage(new FileInfo(file.Name));
 
             lastRows = InitSampleRows(append);
@@ -53,9 +52,9 @@ namespace Mapper
 			foreach (var sample in card.Samples)
 				lastRows[sample] = max;
 		}
-		
 
-		public int FindLastRow(Sample sample)
+
+        private int FindLastRow(Sample sample)
 		{
 			var worksheet = sample.Card.GetTargetWorksheet(output.Workbook);
 
@@ -88,20 +87,29 @@ namespace Mapper
                     AddCard(card, source.Workbook, date);
             }
 		}
-	
-		public void AddCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)
+
+        private void AddCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)
 		{
 			var targetWorksheet = card.GetTargetWorksheet(output.Workbook);
 
             UpdateSampleRows(card);
 
             foreach (var sample in card.Samples)
-				AddSample(sample, sample.GetSourceWorksheet(sourceWorkbook), targetWorksheet, date);
+            {
+                var singleSheetSample = sample as SingleSheetSample;
+                var dateSheetSample = sample as DateSheetSample;
+
+                if (singleSheetSample != null) AddSingleSheetSample(singleSheetSample, sourceWorkbook, targetWorksheet, date);
+                else if (dateSheetSample != null) AddDateSheetSample(dateSheetSample, sourceWorkbook, targetWorksheet, date);
+                else throw new InvalidOperationException("Nieznany rodzaj próbki.");
+            }
 		}
-	
-		public void AddSample(Sample sample, ExcelWorksheet sourceWorksheet, ExcelWorksheet targetWorksheet, DateTime date)
+
+        private void AddSingleSheetSample(SingleSheetSample sample, ExcelWorkbook sourceWorkbook, ExcelWorksheet targetWorksheet, DateTime date)
 		{
-		    var from = sample.GetSourceFromNumber();
+		    var sourceWorksheet = sample.GetSourceWorksheet(sourceWorkbook);
+
+            var from = sample.GetSourceFromNumber();
             var to = sample.GetSourceToNumber();
 		    var count = to - from + 1;
 
@@ -109,7 +117,21 @@ namespace Mapper
                 AddSample(sample, sourceWorksheet, targetWorksheet, date, i);
 		}
 
-	    public void AddSample(Sample sample, ExcelWorksheet sourceWorksheet, ExcelWorksheet targetWorksheet, DateTime date, int index)
+	    private void AddDateSheetSample(DateSheetSample sample, ExcelWorkbook sourceWorkbook, ExcelWorksheet targetWorksheet, DateTime date)
+	    {
+	        if (file.InputFileInfo.Period == Period.Daily)
+	            throw new InvalidOperationException("Typ DateSheetSample nie jest obsługiwany w pliku wejściowym dziennym.");
+
+	        var from = new DateTime(date.Year, date.Month, 1);
+            var to = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+
+            var dates = new DateEnumerable(Period.Daily, from, to);
+
+	        foreach (var d in dates)
+	            AddSample(sample, sample.GetSourceWorksheet(d, sourceWorkbook), targetWorksheet, d, -1);
+        }
+
+        private void AddSample(Sample sample, ExcelWorksheet sourceWorksheet, ExcelWorksheet targetWorksheet, DateTime date, int index)
 	    {
             if (GetLastRow(sample) > sample.Card.TargetFirstRow)
                 AddNextRow(sample, targetWorksheet);
@@ -122,30 +144,30 @@ namespace Mapper
 	        IncreaseLastRow(sample);
 	    }
 
-        public int GetLastRow(Sample sample)
+        private int GetLastRow(Sample sample)
 		{
 			return lastRows[sample];
 		}
 
-	    public void IncreaseLastRow(Sample sample)
+        private void IncreaseLastRow(Sample sample)
 	    {
 	        lastRows[sample]++;
 	    }
 
-	    public void AddNextRow(Sample sample, ExcelWorksheet worksheet)
+        private void AddNextRow(Sample sample, ExcelWorksheet worksheet)
 		{	   
             if (!sample.Card.IsTargetRowEmpty(GetLastRow(sample), worksheet)) return;
 
             worksheet.InsertRow(GetLastRow(sample), 1, sample.Card.TargetFirstRow);
             ExcelHelper.AddConditionalFormattingRow(worksheet);
         }
-	
-		public void FillDate(DateTime date, ExcelWorksheet worksheet, Sample sample)
+
+        private void FillDate(DateTime date, ExcelWorksheet worksheet, Sample sample)
 		{
 		    sample.Card.GetDateCell(GetLastRow(sample), worksheet).Value = date;
 		}
-	
-		public void AddMapping(Mapping mapping, ExcelWorksheet sourceWorksheet, ExcelWorksheet targetWorksheet, int index)
+
+        private void AddMapping(Mapping mapping, ExcelWorksheet sourceWorksheet, ExcelWorksheet targetWorksheet, int index)
 		{
 			var target = mapping.GetTargetCell(GetLastRow(mapping.Sample), targetWorksheet);
 			

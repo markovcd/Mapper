@@ -22,6 +22,9 @@ namespace Mapper
         [XmlIgnore]
 		public File File { get; set; }
 
+        [XmlArrayItem(typeof(RowSample))]
+        [XmlArrayItem(typeof(ColumnSample))]
+        [XmlArrayItem(typeof(DateSheetSample))]
         public List<Sample> Samples { get; set; }
 	
 		

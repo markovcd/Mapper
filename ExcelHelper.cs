@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using OfficeOpenXml;
@@ -122,6 +124,15 @@ namespace Mapper
                 return false;
 
             return true;
+        }
+
+        public static string ConvertToXlsx(string xlsPath)
+        {
+            var excel = @"c:\Program Files (x86)\Microsoft Office\Office12\excelcnv.exe";
+            var xlsxPath = Path.GetTempFileName() + ".xlsx";
+            var process = Process.Start(excel, string.Format(@" -nme -oice {0} {1}", xlsPath, xlsxPath));
+            process.WaitForExit();
+            return xlsxPath;
         }
     }
 }
