@@ -6,19 +6,24 @@ using OfficeOpenXml;
 
 namespace Mapper
 {
-    public abstract class Sample
+    public abstract class Sample : IChildItem<Card>
     {
         [XmlArrayItem(typeof(RowMapping))]
         [XmlArrayItem(typeof(ColumnMapping))]
         [XmlArrayItem(typeof(CellMapping))]
         [XmlArrayItem(typeof(ContentMapping))]
-        public List<Mapping> Mappings { get; set; }
+        public ChildItemCollection<Sample, Mapping> Mappings { get; private set; }
 
         [XmlAttribute]
         public string Name { get; set; }
 
         [XmlIgnore]
-        public Card Card { get; set; }
+        public Card Card { get; private set; }
+
+        public Sample()
+        {
+            Mappings = new ChildItemCollection<Sample, Mapping>(this);
+        }
 
         #region Equals and GetHashCode implementation
         public override int GetHashCode()
@@ -54,6 +59,16 @@ namespace Mapper
         {
             return !(lhs == rhs);
         }
+        #endregion
+
+        #region IChildItem<Card> Members
+
+        Card IChildItem<Card>.Parent
+        {
+            get { return Card; }
+            set { Card = value; }
+        }
+
         #endregion
     }
 

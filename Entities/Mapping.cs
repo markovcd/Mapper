@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using OfficeOpenXml;
 
 namespace Mapper
@@ -87,8 +89,8 @@ namespace Mapper
 		}
 	}
 	
-	public abstract class Mapping
-	{
+	public abstract class Mapping : IChildItem<Sample>
+    {
 		[XmlAttribute]
 		public string Caption { get; set; }
 	
@@ -99,7 +101,7 @@ namespace Mapper
         public bool IsIgnorable { get; set; }
 
         [XmlIgnore]
-		public Sample Sample { get; set; }
+		public Sample Sample { get; private set; }
 	
 		public ExcelRange GetTargetCell(int row, ExcelWorksheet worksheet)
 		{		   
@@ -110,5 +112,16 @@ namespace Mapper
 		{
 			return ExcelHelper.ColumnLetterToInt(TargetColumn);
 		}
-	}
+
+        #region IChildItem<Sample> Members
+
+        Sample IChildItem<Sample>.Parent
+        {
+            get { return Sample; }
+            set { Sample = value; }
+        }
+
+        #endregion
+
+    }
 }

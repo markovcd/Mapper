@@ -15,10 +15,15 @@ namespace Mapper
 		[XmlAttribute]
 		public string Password { get; set; }
 		
-		public List<Card> Cards { get; set; }
+		public ChildItemCollection<File, Card> Cards { get; private set; }
 	
 		public SheetInfo InputFileInfo { get; set; }
-		
+
+	    public File()
+	    {
+	        Cards = new ChildItemCollection<File, Card>(this);
+	    }
+
 		static public File LoadXml(string filePath)
 		{
 			var stream = new StreamReader(filePath);
@@ -26,27 +31,8 @@ namespace Mapper
 			var file = (File)serializer.Deserialize(stream);
 			stream.Close();
 			
-			file.SetParents();
-			
 			return file;
-		}
-		
-		private void SetParents()
-		{
-			foreach (var card in Cards)
-			{
-				card.File = this;
-				
-				foreach (var sample in card.Samples)
-				{
-					sample.Card = card;
-					
-					foreach (var mapping in sample.Mappings)
-						mapping.Sample = sample;
-				}
-			}
-			
-		}
+		}				
 	
 		public void SaveXml(string filePath)
 		{

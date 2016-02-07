@@ -8,7 +8,7 @@ namespace Mapper
 	/// <summary>
 	/// Description of Card.
 	/// </summary>
-	public class Card
+	public class Card : IChildItem<File>
 	{
 		[XmlAttribute]
 		public string Name { get; set; }
@@ -20,12 +20,12 @@ namespace Mapper
 		public int TargetFirstRow { get; set; }
 
         [XmlIgnore]
-		public File File { get; set; }
+		public File File { get; internal set; }
 
         [XmlArrayItem(typeof(RowSample))]
         [XmlArrayItem(typeof(ColumnSample))]
         [XmlArrayItem(typeof(DateSheetSample))]
-        public List<Sample> Samples { get; set; }
+        public ChildItemCollection<Card, Sample> Samples { get; private set; }
 	
 		
 		public ExcelWorksheet GetTargetWorksheet(ExcelWorkbook workbook)
@@ -40,7 +40,9 @@ namespace Mapper
 		{
 			TargetFirstRow = 6;
 			TargetDateColumn = "A";
-		}
+            Samples = new ChildItemCollection<Card, Sample>(this);
+
+        }
 		
 		public ExcelRange GetDateCell(int row, ExcelWorksheet worksheet)
 		{
@@ -56,5 +58,15 @@ namespace Mapper
         {
             return !ExcelHelper.IsValuePresent(GetDateCell(row, worksheet));
         }
+
+        #region IChildItem<File> Members
+
+        File IChildItem<File>.Parent
+        {
+            get { return File; }
+            set { File = value; }
+        }
+
+        #endregion
     }
 }
