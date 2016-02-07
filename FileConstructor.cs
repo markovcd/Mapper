@@ -127,7 +127,7 @@ namespace Mapper
 
             var dates = new DateEnumerable(Period.Daily, from, to);
 
-	        foreach (var d in dates)
+	        foreach (var d in dates.Where(d => !sample.IsSourceEmpty(d, sourceWorkbook)))
 	            AddSample(sample, sample.GetSourceWorksheet(d, sourceWorkbook), targetWorksheet, d, -1);
         }
 

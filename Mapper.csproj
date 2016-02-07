@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChildItemCollection.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DateEnumerable.cs" />
     <Compile Include="Entities\Card.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="Entities\Mapping.cs" />
     <Compile Include="Entities\Sample.cs" />
     <Compile Include="FileConstructor.cs" />
-    <Compile Include="PathNormalizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SheetInfo.cs" />
@@ -192,6 +192,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configs\ProduktFespol2015.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configs\Zatężalnia.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Mappings\Zatężalnia.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

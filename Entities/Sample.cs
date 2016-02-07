@@ -91,10 +91,10 @@ namespace Mapper
             return worksheet;
         }
 
-        public bool IsSourceEmpty(ExcelWorksheet worksheet)
+        public bool IsSourceEmpty(DateTime date, ExcelWorkbook workbook)
         {
             return Mappings.OfType<CellMapping>()
-                           .Select(m => m.IsSourceValuePresent(worksheet))
+                           .Select(m => m.IsSourceValuePresent(GetSourceWorksheet(date, workbook)))
                            .All(b => !b);
         }
     }
