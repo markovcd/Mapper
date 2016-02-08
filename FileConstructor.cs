@@ -152,8 +152,7 @@ namespace Mapper
             	       .GroupBy(s => s.Sample)
             		   .ToDictionary(g => g.Key, sort);        
 		}
-
-	    
+    
 	    private static IEnumerable<SampleEntry> GetSamples(Sample sample, ExcelWorkbook sourceWorkbook, DateTime date)
 	    {
 	    	var singleSheetSample = sample as SingleSheetSample;
@@ -176,8 +175,7 @@ namespace Mapper
 
 			return Enumerable.Range(from, to - from + 1)
 				             .Where(i => !sample.IsSourceEmpty(i, sourceWorksheet))
-					  		 .Select(i => GetSample(sample, sourceWorksheet, date, i));
-				
+					  		 .Select(i => GetSample(sample, sourceWorksheet, date, i));				
 		}
 
 	    private static IEnumerable<SampleEntry> GetDateSheetSamples(DateSheetSample sample, ExcelWorkbook sourceWorkbook, DateTime date)
