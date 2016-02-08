@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -140,7 +141,17 @@ namespace Mapper
             if (value is DateTime) return (DateTime)value;
             if (value is double) return DateTime.FromOADate((double)value);
 
-            return (DateTime)Convert.ChangeType(value, TypeCode.DateTime);
+            if (!(value is string)) return (DateTime) Convert.ChangeType(value, TypeCode.DateTime);
+
+            var formats = new[] { "yyyy-MM-dd", "dd-MM-yyyy", "dd.MM.yyyy", "dd,MM,yyyy", "dd.MM,yyyy", "dd,MM.yyyy", "dd MM yyyy", "yyyy.MM.dd" };
+            DateTime date;
+
+            if (DateTime.TryParseExact((string)value, formats, CultureInfo.CurrentCulture, DateTimeStyles.AllowWhiteSpaces, out date))
+                return date;
+           
+            throw new FormatException(string.Format("Nie można zinterpretować daty {0}", value));
+            
+
         }
     }
 }

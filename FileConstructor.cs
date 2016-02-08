@@ -137,10 +137,11 @@ namespace Mapper
         private void AddMapping(SampleEntry entry, ExcelWorksheet targetWorksheet)
         {
         	foreach (var m in entry.Entries)
-            {
-        		var target = m.Mapping.GetTargetCell(GetLastRow(entry.Sample), targetWorksheet);
-                target.Value = m.Value;
-            }
+        	{
+        	    var target = m.Mapping.GetTargetCell(GetLastRow(entry.Sample), targetWorksheet);
+
+        	    target.Value = m.Mapping.IsDateColumnMapping() ? ExcelHelper.ToDate(m.Value) : m.Value;
+        	}
         }
         
         private static Dictionary<Sample, IEnumerable<SampleEntry>> GetCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)

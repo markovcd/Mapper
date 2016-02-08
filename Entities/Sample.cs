@@ -24,7 +24,7 @@ namespace Mapper
         
         public Mapping GetDateColumnMapping()
         {
-        	return Mappings.FirstOrDefault(m => m.GetTargetColumnNumber() == Card.GetTargetDateColumnNumber());
+        	return Mappings.FirstOrDefault(m => m.IsDateColumnMapping());
         }
 
         #region Equals and GetHashCode implementation

@@ -27,6 +27,11 @@ namespace Mapper
 			return ExcelHelper.ColumnLetterToInt(TargetColumn);
 		}
 
+	    public bool IsDateColumnMapping()
+	    {
+	        return GetTargetColumnNumber() == Sample.Card.GetTargetDateColumnNumber();
+	    }
+
         #region IChildItem<Sample> Members
 
         Sample IChildItem<Sample>.Parent
