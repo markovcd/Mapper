@@ -10,7 +10,7 @@ namespace Mapper
 	{	
 		public static void Main(string[] args)
 		{
-			var cfg = args.Any() ? args[0] : "config.xml";
+			var cfg = args.Any() ? args[0] : Console.ReadLine();
 			DateTime date;
 			
 			if (cfg.Equals("-month", StringComparison.CurrentCultureIgnoreCase))

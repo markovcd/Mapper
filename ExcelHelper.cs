@@ -134,5 +134,13 @@ namespace Mapper
             process.WaitForExit();
             return xlsxPath;
         }
+
+        public static DateTime ToDate(object value)
+        {
+            if (value is DateTime) return (DateTime)value;
+            if (value is double) return DateTime.FromOADate((double)value);
+
+            return (DateTime)Convert.ChangeType(value, TypeCode.DateTime);
+        }
     }
 }

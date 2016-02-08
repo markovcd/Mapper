@@ -5,7 +5,9 @@ using OfficeOpenXml;
 
 namespace Mapper
 {
-	/// <summary>
+	public enum Order { BySamples, ByDates }
+    
+    /// <summary>
 	/// Description of Card.
 	/// </summary>
 	public class Card : IChildItem<File>
@@ -18,6 +20,9 @@ namespace Mapper
 		
 		[XmlAttribute]
 		public int TargetFirstRow { get; set; }
+
+        [XmlAttribute]
+        public Order Order { get; set; }
 
         [XmlIgnore]
 		public File File { get; internal set; }

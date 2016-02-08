@@ -6,7 +6,21 @@ using OfficeOpenXml;
 
 namespace Mapper
 {
-    public abstract class Sample : IChildItem<Card>
+    public class SampleEntry
+    {
+    	public Sample Sample { get; private set; }
+    	public DateTime Date { get; private set; }
+    	public IEnumerable<MappingEntry> Entries { get; private set; }
+    	
+    	public SampleEntry(Sample sample, DateTime date, IEnumerable<MappingEntry> entries)
+    	{
+    		this.Sample = sample;
+			this.Date = date;
+			this.Entries = entries;
+    	}
+    }
+	
+	public abstract class Sample : IChildItem<Card>
     {
         [XmlArrayItem(typeof(RowMapping))]
         [XmlArrayItem(typeof(ColumnMapping))]
@@ -23,6 +37,11 @@ namespace Mapper
         public Sample()
         {
             Mappings = new ChildItemCollection<Sample, Mapping>(this);
+        }
+        
+        public Mapping GetDateColumnMapping()
+        {
+        	return Mappings.FirstOrDefault(m => m.GetTargetColumnNumber() == Card.GetTargetDateColumnNumber());
         }
 
         #region Equals and GetHashCode implementation
