@@ -175,7 +175,7 @@ namespace Mapper
 
 			return Enumerable.Range(from, to - from + 1)
 				             .Where(i => !sample.IsSourceEmpty(i, sourceWorksheet))
-					  		 .Select(i => GetSample(sample, sourceWorksheet, date, i));				
+					  		 .Select(i => new SampleEntry(sample, sourceWorksheet, date, i));				
 		}
 
 	    private static IEnumerable<SampleEntry> GetDateSheetSamples(DateSheetSample sample, ExcelWorkbook sourceWorkbook, DateTime date)
@@ -187,43 +187,12 @@ namespace Mapper
             var to = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
 
             return new DateEnumerable(Period.Daily, from, to).Where(d => !sample.IsSourceEmpty(d, sourceWorkbook))
-            	                                             .Select(d => GetSample(
+            	                                             .Select(d => new SampleEntry(
             													sample,
             	                       							sample.GetSourceWorksheet(d, sourceWorkbook), 
             	                       							d, -1));
         }
-	   	   
-        private static SampleEntry GetSample(Sample sample, ExcelWorksheet sourceWorksheet, DateTime date, int index)
-        {        
-        	var entries = sample.Mappings.Select(m => GetMapping(m, sourceWorksheet, index));
-        	
-        	var dateMapping = sample.GetDateColumnMapping();
-        	if (dateMapping != null)
-        		date = ExcelHelper.ToDate(GetMapping(dateMapping, sourceWorksheet, index).Value);
-        	
-        	return new SampleEntry(sample, date, entries);
-        }
-                        
-        private static MappingEntry GetMapping(Mapping mapping, ExcelWorksheet sourceWorksheet, int index)
-		{
-			var contentMapping = mapping as ContentMapping;
-			var movableMapping = mapping as MovableMapping;
-			var cellMapping = mapping as CellMapping;
-			
-			object value;
-			
-			if (contentMapping != null)
-				value = contentMapping.GetValue();
-			else if (movableMapping != null)
-                value = movableMapping.GetValue(index, sourceWorksheet);
-			else if (cellMapping != null)
-                value = cellMapping.GetValue(sourceWorksheet);
-			else
-            	throw new InvalidOperationException("Nieznany rodzaj próbki.");
-			
-			return new MappingEntry(mapping, value);
-		}
-		
+	   	          		
 		private void Protect()
 		{
 			var worksheets = file.Cards.Select(c => c.GetTargetWorksheet(output.Workbook));
