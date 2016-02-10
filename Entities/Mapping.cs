@@ -1,9 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using OfficeOpenXml;
 
 namespace Mapper
 {
-	public abstract class Mapping : IChildItem<Sample>
+    
+
+    public abstract class Mapping : IChildItem<Sample>
     {
 		[XmlAttribute]
 		public string Caption { get; set; }

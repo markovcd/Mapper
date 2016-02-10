@@ -31,5 +31,15 @@ namespace Mapper
                            .Select(m => m.IsSourceValuePresent(GetSourceWorksheet(date, workbook)))
                            .All(b => !b);
         }
+
+        public override IEnumerable<SampleEntry> GetSamples(ExcelWorkbook sourceWorkbook, DateTime date)
+        {
+            var from = new DateTime(date.Year, date.Month, 1);
+            var to = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+
+            return new DateEnumerable(Period.Daily, from, to).Where(d => !IsSourceEmpty(d, sourceWorkbook))
+                                                             .Select(d => 
+                                                                new SampleEntry(this, GetSourceWorksheet(d, sourceWorkbook), d, -1));
+        }
     }
 }

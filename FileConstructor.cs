@@ -81,9 +81,19 @@ namespace Mapper
 
         private void AddNextRow(Sample sample, ExcelWorksheet worksheet)
         {
+            var firstRow = sample.Card.TargetFirstRow;
+            var lastRow = GetLastRow(sample);
+
             if (!sample.Card.IsTargetRowEmpty(GetLastRow(sample), worksheet)) return;
 
-            worksheet.InsertRow(GetLastRow(sample), 1, sample.Card.TargetFirstRow);
+            var firstCol = sample.Card.FirstColumnNumber;
+            var lastCol = sample.Card.LastColumnNumber;
+
+            var columns = Enumerable.Range(firstCol, lastCol - firstCol + 1).Select(ExcelHelper.IntToColumnLetter);
+
+            foreach (var column in columns)
+                worksheet.Cells[column + lastRow].StyleID = worksheet.Cells[column + firstRow].StyleID;
+
             ExcelHelper.AddConditionalFormattingRow(worksheet);
         }
 
@@ -116,10 +126,10 @@ namespace Mapper
             UpdateSampleRows(card);
 
             foreach (var v in GetCard(card, sourceWorkbook, date))
-            	AddSample(v.Key, v.Value, targetWorksheet);
+            	AddSamples(v.Key, v.Value, targetWorksheet);
 		}
         
-        private void AddSample(Sample sample, IEnumerable<SampleEntry> entries, ExcelWorksheet targetWorksheet)
+        private void AddSamples(Sample sample, IEnumerable<SampleEntry> entries, ExcelWorksheet targetWorksheet)
         {
         	foreach (var entry in entries) 
         	{
@@ -128,19 +138,22 @@ namespace Mapper
 
 	            FillDate(entry.Date, targetWorksheet, sample);
 	            
-	            AddMapping(entry, targetWorksheet);
+	            AddMappings(entry, targetWorksheet);
 	
 	            IncreaseLastRow(sample);
         	}	
         }
-        
-        private void AddMapping(SampleEntry entry, ExcelWorksheet targetWorksheet)
+               
+        private void AddMappings(SampleEntry entry, ExcelWorksheet targetWorksheet)
         {
         	foreach (var m in entry.Entries)
         	{
         	    var target = m.Mapping.GetTargetCell(GetLastRow(entry.Sample), targetWorksheet);
 
-        	    target.Value = m.Mapping.IsDateColumnMapping() ? ExcelHelper.ToDate(m.Value) : m.Value;
+        	    if (m.IsFormula)  
+        	        target.Formula = m.Value.ToString();     	   
+        	    else
+        	    	target.Value = m.Mapping.IsDateColumnMapping() ? ExcelHelper.ToDate(m.Value) : m.Value;
         	}
         }
         
@@ -149,51 +162,11 @@ namespace Mapper
       		Func<IGrouping<Sample, SampleEntry>, IEnumerable<SampleEntry>> sort = 
       			g => card.Order == Order.ByDates ? g.OrderBy(s => s.Date).AsEnumerable() : g.AsEnumerable();
             
-            return card.Samples.SelectMany(s => GetSamples(s, sourceWorkbook, date))
+            return card.Samples.SelectMany(s => s.GetSamples(sourceWorkbook, date))
             	       .GroupBy(s => s.Sample)
             		   .ToDictionary(g => g.Key, sort);        
 		}
-    
-	    private static IEnumerable<SampleEntry> GetSamples(Sample sample, ExcelWorkbook sourceWorkbook, DateTime date)
-	    {
-	    	var singleSheetSample = sample as SingleSheetSample;
-            var dateSheetSample = sample as DateSheetSample;
-
-            if (singleSheetSample != null) 
-            	return GetSingleSheetSamples(singleSheetSample, sourceWorkbook, date);
-            if (dateSheetSample != null) 
-            	return GetDateSheetSamples(dateSheetSample, sourceWorkbook, date);
-            
-            throw new InvalidOperationException("Nieznany rodzaj próbki.");
-	    }
-	    
-	    private static IEnumerable<SampleEntry> GetSingleSheetSamples(SingleSheetSample sample, ExcelWorkbook sourceWorkbook, DateTime date)
-		{
-		    var sourceWorksheet = sample.GetSourceWorksheet(sourceWorkbook);
-
-            var from = sample.GetSourceFromNumber();
-            var to = sample.GetSourceToNumber();
-
-			return Enumerable.Range(from, to - from + 1)
-				             .Where(i => !sample.IsSourceEmpty(i, sourceWorksheet))
-					  		 .Select(i => new SampleEntry(sample, sourceWorksheet, date, i));				
-		}
-
-	    private static IEnumerable<SampleEntry> GetDateSheetSamples(DateSheetSample sample, ExcelWorkbook sourceWorkbook, DateTime date)
-	    {
-	        //if (file.InputFileInfo.Period == Period.Daily)
-	            //throw new InvalidOperationException("Typ DateSheetSample nie jest obsługiwany w pliku wejściowym dziennym.");
-
-	        var from = new DateTime(date.Year, date.Month, 1);
-            var to = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
-
-            return new DateEnumerable(Period.Daily, from, to).Where(d => !sample.IsSourceEmpty(d, sourceWorkbook))
-            	                                             .Select(d => new SampleEntry(
-            													sample,
-            	                       							sample.GetSourceWorksheet(d, sourceWorkbook), 
-            	                       							d, -1));
-        }
-	   	          		
+    	       		
 		private void Protect()
 		{
 			var worksheets = file.Cards.Select(c => c.GetTargetWorksheet(output.Workbook));

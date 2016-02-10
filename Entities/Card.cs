@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using OfficeOpenXml;
 
@@ -10,8 +12,10 @@ namespace Mapper
 	/// Description of Card.
 	/// </summary>
 	public class Card : IChildItem<File>
-	{
-		[XmlAttribute]
+    {
+        private int firstColumnNumber, lastColumnNumber;
+
+        [XmlAttribute]
 		public string Name { get; set; }
 	
 		[XmlAttribute]
@@ -25,6 +29,38 @@ namespace Mapper
 
         [XmlIgnore]
 		public File File { get; internal set; }
+
+        [XmlIgnore]
+        public int FirstColumnNumber
+        {
+            get
+            {
+                if (firstColumnNumber == 0)
+                {
+                    var t = GetTargetColumnRange();
+                    firstColumnNumber = t.Item1;
+                    lastColumnNumber = t.Item2;
+                }
+
+                return firstColumnNumber;
+            }
+        }
+
+        [XmlIgnore]
+        public int LastColumnNumber
+        {
+            get
+            {
+                if (lastColumnNumber == 0)
+                {
+                    var t = GetTargetColumnRange();
+                    firstColumnNumber = t.Item1;
+                    lastColumnNumber = t.Item2;
+                }
+
+                return lastColumnNumber;
+            }
+        }
 
         [XmlArrayItem(typeof(RowSample))]
         [XmlArrayItem(typeof(ColumnSample))]
@@ -61,6 +97,16 @@ namespace Mapper
         public bool IsTargetRowEmpty(int row, ExcelWorksheet worksheet)
         {
             return !ExcelHelper.IsValuePresent(GetDateCell(row, worksheet));
+        }
+
+        private Tuple<int, int> GetTargetColumnRange()
+        {
+            var columns = Samples.SelectMany(s => s.Mappings)
+                                 .Select(m => m.GetTargetColumnNumber())
+                                 .Concat(new[] {GetTargetDateColumnNumber()})
+                                 .OrderBy(i => i).ToList();
+
+            return Tuple.Create(columns.First(), columns.Last());
         }
 
         #region IChildItem<File> Members

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using OfficeOpenXml;
 
@@ -31,6 +33,18 @@ namespace Mapper
                 throw new KeyNotFoundException(string.Format("Nie znaleziono karty {0} w pliku wejściowym.", GetSourceCardName()));
 
             return worksheet;
+        }
+
+        public override IEnumerable<SampleEntry> GetSamples(ExcelWorkbook sourceWorkbook, DateTime date)
+        {
+            var sourceWorksheet = GetSourceWorksheet(sourceWorkbook);
+
+            var from = GetSourceFromNumber();
+            var to = GetSourceToNumber();
+
+            return Enumerable.Range(from, to - from + 1)
+                             .Where(i => !IsSourceEmpty(i, sourceWorksheet))
+                               .Select(i => new SampleEntry(this, sourceWorksheet, date, i));
         }
     }
 }

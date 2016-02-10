@@ -7,7 +7,7 @@ using System.Linq;
 namespace Mapper
 {
 	class Program
-	{	
+	{			
 		public static void Main(string[] args)
 		{
 			var cfg = args.Any() ? args[0] : Console.ReadLine();
@@ -32,7 +32,5 @@ namespace Mapper
 				config.Execute();
 			}
 		}
-    }
-	
-	
+    }	
 }

@@ -118,6 +118,22 @@ namespace Mapper
             return sum;
         }
 
+        public static string IntToColumnLetter(int columnNumber)
+        {
+            int dividend = columnNumber;
+            string columnName = String.Empty;
+            int modulo;
+
+            while (dividend > 0)
+            {
+                modulo = (dividend - 1) % 26;
+                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+                dividend = (int)((dividend - modulo) / 26);
+            }
+
+            return columnName;
+        }
+
         public static bool IsValuePresent(ExcelRange cell)
         {
             if (cell == null || cell.Value == null) return false;

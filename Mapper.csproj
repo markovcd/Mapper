@@ -77,6 +77,7 @@
     <Compile Include="Entities\ContentMapping.cs" />
     <Compile Include="Entities\DateSheetSample.cs" />
     <Compile Include="Entities\File.cs" />
+    <Compile Include="Entities\FormulaMapping.cs" />
     <Compile Include="Entities\Mapping.cs" />
     <Compile Include="Entities\MappingEntry.cs" />
     <Compile Include="Entities\MovableMapping.cs" />
@@ -196,6 +197,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="Mappings\ZbiorczyZatężalnia2016.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +220,7 @@
     </Content>
     <Content Include="Configs\Zbiorczy.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Mappings\ZbiorczyNeutralizacja.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

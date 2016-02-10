@@ -7,26 +7,30 @@ namespace Mapper
     {
         public Mapping Mapping { get; private set; }
         public object Value { get; private set; }
+        public bool IsFormula { get; private set; }
 
         public MappingEntry(Mapping mapping, ExcelWorksheet sourceWorksheet, int index)
         {
             var contentMapping = mapping as ContentMapping;
             var movableMapping = mapping as MovableMapping;
             var cellMapping = mapping as CellMapping;
-
-            object value;
+            var formulaMapping = mapping as FormulaMapping;
 
             if (contentMapping != null)
-                value = contentMapping.GetValue();
+                Value = contentMapping.GetValue();
             else if (movableMapping != null)
-                value = movableMapping.GetValue(index, sourceWorksheet);
+                Value = movableMapping.GetValue(index, sourceWorksheet);
             else if (cellMapping != null)
-                value = cellMapping.GetValue(sourceWorksheet);
+                Value = cellMapping.GetValue(sourceWorksheet);
+            else if (formulaMapping != null)
+            {
+                IsFormula = true;
+                Value = formulaMapping.GetValue();
+            }
             else
                 throw new InvalidOperationException("Nieznany rodzaj próbki.");
 
             Mapping = mapping;
-            Value = value;
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
+using OfficeOpenXml;
 
 namespace Mapper
 {	
@@ -9,6 +12,7 @@ namespace Mapper
         [XmlArrayItem(typeof(ColumnMapping))]
         [XmlArrayItem(typeof(CellMapping))]
         [XmlArrayItem(typeof(ContentMapping))]
+        [XmlArrayItem(typeof(FormulaMapping))]
         public ChildItemCollection<Sample, Mapping> Mappings { get; private set; }
 
         [XmlAttribute]
@@ -26,6 +30,8 @@ namespace Mapper
         {
         	return Mappings.FirstOrDefault(m => m.IsDateColumnMapping());
         }
+
+	    public abstract IEnumerable<SampleEntry> GetSamples(ExcelWorkbook sourceWorkbook, DateTime date);
 
         #region Equals and GetHashCode implementation
         public override int GetHashCode()
