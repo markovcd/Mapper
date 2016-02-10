@@ -38,7 +38,8 @@ namespace Mapper
             if (!string.IsNullOrEmpty(TemplatePath)) file.Name = TemplatePath;
 
             var constructor = new FileConstructor(SourcePath, TargetPath, file, Append);
-			constructor.AddFiles(From, To);
+		    constructor.FileAdding += (s, e) => Console.WriteLine(e.FilePath);
+            constructor.AddFiles(From, To);
 			constructor.Dispose();
 		}
 	}

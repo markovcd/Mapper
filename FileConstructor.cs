@@ -6,17 +6,29 @@ using OfficeOpenXml;
 
 namespace Mapper
 {
-	/// <summary>
-	/// Description of FileConstructor.
-	/// </summary>
-	public class FileConstructor : IDisposable
+    public class FileEventArgs : EventArgs
+    {
+        public string FilePath { get; private set; }
+
+        public FileEventArgs(string filePath)
+        {
+            FilePath = filePath;
+        }
+    }
+
+    /// <summary>
+    /// Description of FileConstructor.
+    /// </summary>
+    public class FileConstructor : IDisposable
 	{
 		private readonly ExcelPackage output;
 		private readonly File file;
 		private readonly Dictionary<Sample, int> lastRows;
 	
 		public string SourceDirectory { get; private set; }
-		public string TargetPath { get; private set; }	
+		public string TargetPath { get; private set; }
+
+	    public event EventHandler<FileEventArgs> FileAdding; 
 		
 		public FileConstructor(string sourceDir, string targetPath, File file, bool append = false)
 		{
@@ -84,7 +96,7 @@ namespace Mapper
             var firstRow = sample.Card.TargetFirstRow;
             var lastRow = GetLastRow(sample);
 
-            if (!sample.Card.IsTargetRowEmpty(GetLastRow(sample), worksheet)) return;
+            if (!sample.Card.IsTargetRowEmpty(lastRow, worksheet)) return;
 
             var firstCol = sample.Card.FirstColumnNumber;
             var lastCol = sample.Card.LastColumnNumber;
@@ -100,10 +112,10 @@ namespace Mapper
         public void AddFiles(DateTime from, DateTime to)
 		{		
 			foreach (var f in file.InputFileInfo.ConstructPaths(SourceDirectory, from, to))
-                AddFile(f.Key, f.Value);
+                AddFile(f.Value, f.Key);
 		}
 		
-		public void AddFile(DateTime date, string filePath)
+		public void AddFile(string filePath, DateTime date)
 		{
             var inputFile = new FileInfo(filePath);
             
@@ -112,14 +124,18 @@ namespace Mapper
 
             using (var source = new ExcelPackage(inputFile))
             {               
-                Console.WriteLine(filePath);
-
-                foreach (var card in file.Cards)
-                    AddCard(card, source.Workbook, date);
+                OnFileAdding(new FileEventArgs(filePath));
+                AddFile(source.Workbook, date);
             }
 		}
 
-        private void AddCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)
+	    public void AddFile(ExcelWorkbook sourceWorkbook, DateTime date)
+	    {           
+            foreach (var card in file.Cards)
+                AddCard(card, sourceWorkbook, date);
+        }
+
+        public void AddCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)
 		{
 			var targetWorksheet = card.GetTargetWorksheet(output.Workbook);
         	
@@ -176,5 +192,11 @@ namespace Mapper
         	output.SaveAs(new FileInfo(TargetPath));
             output.Dispose();
 		}
+
+	    protected virtual void OnFileAdding(FileEventArgs e)
+	    {
+	        if (FileAdding != null)
+                FileAdding.Invoke(this, e);
+	    }
 	}
 }
