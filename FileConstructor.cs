@@ -125,7 +125,7 @@ namespace Mapper
         	
             UpdateSampleRows(card);
 
-            foreach (var v in GetCard(card, sourceWorkbook, date))
+            foreach (var v in card.GetCard(sourceWorkbook, date))
             	AddSamples(v.Key, v.Value, targetWorksheet);
 		}
         
@@ -156,17 +156,7 @@ namespace Mapper
         	    	target.Value = m.Mapping.IsDateColumnMapping() ? ExcelHelper.ToDate(m.Value) : m.Value;
         	}
         }
-        
-        private static Dictionary<Sample, IEnumerable<SampleEntry>> GetCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)
-		{
-      		Func<IGrouping<Sample, SampleEntry>, IEnumerable<SampleEntry>> sort = 
-      			g => card.Order == Order.ByDates ? g.OrderBy(s => s.Date).AsEnumerable() : g.AsEnumerable();
-            
-            return card.Samples.SelectMany(s => s.GetSamples(sourceWorkbook, date))
-            	       .GroupBy(s => s.Sample)
-            		   .ToDictionary(g => g.Key, sort);        
-		}
-    	       		
+    		
 		private void Protect()
 		{
 			var worksheets = file.Cards.Select(c => c.GetTargetWorksheet(output.Workbook));

@@ -109,6 +109,16 @@ namespace Mapper
             return Tuple.Create(columns.First(), columns.Last());
         }
 
+        public Dictionary<Sample, IEnumerable<SampleEntry>> GetCard(ExcelWorkbook sourceWorkbook, DateTime date)
+        {
+            Func<IGrouping<Sample, SampleEntry>, IEnumerable<SampleEntry>> sort =
+                g => Order == Order.ByDates ? g.OrderBy(s => s.Date).AsEnumerable() : g.AsEnumerable();
+
+            return Samples.SelectMany(s => s.GetSamples(sourceWorkbook, date))
+                          .GroupBy(s => s.Sample)
+                          .ToDictionary(g => g.Key, sort);
+        }
+
         #region IChildItem<File> Members
 
         File IChildItem<File>.Parent
