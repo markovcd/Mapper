@@ -16,6 +16,16 @@ namespace Mapper
         }
     }
 
+    public class CardEventArgs : EventArgs
+    {
+        public Card Card { get; private set; }
+
+        public CardEventArgs(Card card)
+        {
+            Card = card;
+        }
+    }
+
     /// <summary>
     /// Description of FileConstructor.
     /// </summary>
@@ -28,9 +38,12 @@ namespace Mapper
 		public string SourceDirectory { get; private set; }
 		public string TargetPath { get; private set; }
 
-	    public event EventHandler<FileEventArgs> FileAdding; 
-		
-		public FileConstructor(string sourceDir, string targetPath, File file, bool append = false)
+	    public event EventHandler<FileEventArgs> FileAdding;
+        public event EventHandler<FileEventArgs> FileAdded;
+        public event EventHandler<CardEventArgs> CardAdding;
+        public event EventHandler<CardEventArgs> CardAdded;
+
+        public FileConstructor(string sourceDir, string targetPath, File file, bool append = false)
 		{
 			SourceDirectory = sourceDir;
 			TargetPath = targetPath;
@@ -126,10 +139,11 @@ namespace Mapper
             {               
                 OnFileAdding(new FileEventArgs(filePath));
                 AddFile(source.Workbook, date);
+                OnFileAdded(new FileEventArgs(filePath));
             }
 		}
 
-	    public void AddFile(ExcelWorkbook sourceWorkbook, DateTime date)
+        public void AddFile(ExcelWorkbook sourceWorkbook, DateTime date)
 	    {           
             foreach (var card in file.Cards)
                 AddCard(card, sourceWorkbook, date);
@@ -137,13 +151,17 @@ namespace Mapper
 
         public void AddCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)
 		{
-			var targetWorksheet = card.GetTargetWorksheet(output.Workbook);
+            OnCardAdding(new CardEventArgs(card));
+
+            var targetWorksheet = card.GetTargetWorksheet(output.Workbook);
         	
             UpdateSampleRows(card);
 
             foreach (var v in card.GetCard(sourceWorkbook, date))
             	AddSamples(v.Key, v.Value, targetWorksheet);
-		}
+
+            OnCardAdded(new CardEventArgs(card));
+        }
         
         private void AddSamples(Sample sample, IEnumerable<SampleEntry> entries, ExcelWorksheet targetWorksheet)
         {
@@ -198,5 +216,23 @@ namespace Mapper
 	        if (FileAdding != null)
                 FileAdding.Invoke(this, e);
 	    }
-	}
+
+        protected virtual void OnFileAdded(FileEventArgs e)
+        {
+            if (FileAdded != null)
+                FileAdded.Invoke(this, e);
+        }
+
+        protected virtual void OnCardAdding(CardEventArgs e)
+        {
+            if (CardAdding != null)
+                CardAdding.Invoke(this, e);
+        }
+
+        protected virtual void OnCardAdded(CardEventArgs e)
+        {
+            if (CardAdded != null)
+                CardAdded.Invoke(this, e);
+        }
+    }
 }
