@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using System.IO;
-using System.Linq;
 
 namespace Mapper
 {
@@ -38,7 +36,8 @@ namespace Mapper
             if (!string.IsNullOrEmpty(TemplatePath)) file.Name = TemplatePath;
 
             var constructor = new FileConstructor(SourcePath, TargetPath, file, Append);
-		    constructor.FileAdding += (s, e) => Console.WriteLine(e.FilePath);
+		    constructor.FileAdding += (s, e) => Console.Write(e.FilePath);
+		    constructor.FileAdded += (s, e) => Console.WriteLine('.');
             constructor.AddFiles(From, To);
 			constructor.Dispose();
 		}

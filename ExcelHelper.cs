@@ -118,22 +118,6 @@ namespace Mapper
             return sum;
         }
 
-        public static string IntToColumnLetter(int columnNumber)
-        {
-            int dividend = columnNumber;
-            string columnName = String.Empty;
-            int modulo;
-
-            while (dividend > 0)
-            {
-                modulo = (dividend - 1) % 26;
-                columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
-                dividend = (int)((dividend - modulo) / 26);
-            }
-
-            return columnName;
-        }
-
         public static bool IsValuePresent(ExcelRange cell)
         {
             if (cell == null || cell.Value == null) return false;
@@ -152,14 +136,15 @@ namespace Mapper
             return xlsxPath;
         }
 
-        public static DateTime ToDate(object value)
+        public static DateTime ToDate(object value, string[] formats = null)
         {
             if (value is DateTime) return (DateTime)value;
             if (value is double) return DateTime.FromOADate((double)value);
 
             if (!(value is string)) return (DateTime) Convert.ChangeType(value, TypeCode.DateTime);
 
-            var formats = new[] { "yyyy-MM-dd", "dd-MM-yyyy", "dd.MM.yyyy", "dd,MM,yyyy", "dd.MM,yyyy", "dd,MM.yyyy", "dd MM yyyy", "yyyy.MM.dd" };
+            formats = formats ?? new[] { "yyyy-MM-dd" };
+            
             DateTime date;
 
             if (DateTime.TryParseExact((string)value, formats, CultureInfo.CurrentCulture, DateTimeStyles.AllowWhiteSpaces, out date))

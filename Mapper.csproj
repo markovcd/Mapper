@@ -80,7 +80,7 @@
     <Compile Include="Entities\Mapping\FormulaMapping.cs" />
     <Compile Include="Entities\Mapping\Mapping.cs" />
     <Compile Include="Entities\MappingEntry.cs" />
-    <Compile Include="Entities\MovableMapping.cs" />
+    <Compile Include="Entities\Mapping\MovableMapping.cs" />
     <Compile Include="Entities\Mapping\RowMapping.cs" />
     <Compile Include="Entities\Sample\RowSample.cs" />
     <Compile Include="Entities\Sample\Sample.cs" />
@@ -137,6 +137,7 @@
     </None>
     <None Include="Configs\Biala2016.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Configs\Czarna2015.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -183,6 +184,7 @@
     </None>
     <None Include="Mappings\Produkt.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Mappings\ProduktFespol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -192,6 +194,7 @@
     </None>
     <None Include="Mappings\ZbiorczyFespol.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Mappings\ZbiorczyPohydrolityczny.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

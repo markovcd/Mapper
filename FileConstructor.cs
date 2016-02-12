@@ -111,12 +111,7 @@ namespace Mapper
 
             if (!sample.Card.IsTargetRowEmpty(lastRow, worksheet)) return;
 
-            var firstCol = sample.Card.FirstColumnNumber;
-            var lastCol = sample.Card.LastColumnNumber;
-
-            var columns = Enumerable.Range(firstCol, lastCol - firstCol + 1).Select(ExcelHelper.IntToColumnLetter);
-
-            foreach (var column in columns)
+            foreach (var column in sample.Card.TargetColumns)
                 worksheet.Cells[column + lastRow].StyleID = worksheet.Cells[column + firstRow].StyleID;
 
             ExcelHelper.AddConditionalFormattingRow(worksheet);
@@ -187,7 +182,7 @@ namespace Mapper
         	    if (m.IsFormula)  
         	        target.Formula = m.Value.ToString();     	   
         	    else
-        	    	target.Value = m.Mapping.IsDateColumnMapping() ? ExcelHelper.ToDate(m.Value) : m.Value;
+        	    	target.Value = m.Mapping.IsDateColumnMapping() ? m.ToDate() : m.Value;
         	}
         }
     		

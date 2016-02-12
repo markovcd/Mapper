@@ -32,5 +32,10 @@ namespace Mapper
 
             Mapping = mapping;
         }
+        
+        public DateTime ToDate()
+        {
+        	return ExcelHelper.ToDate(Value, Mapping.Sample.Card.DateFormats.ToArray());
+        }
     }
 }

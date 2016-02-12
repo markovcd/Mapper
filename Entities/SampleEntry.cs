@@ -17,7 +17,7 @@ namespace Mapper
 
             var dateMapping = sample.GetDateColumnMapping();
             if (dateMapping != null)
-                date = ExcelHelper.ToDate(new MappingEntry(dateMapping, sourceWorksheet, index).Value);
+            	date = new MappingEntry(dateMapping, sourceWorksheet, index).ToDate();
 
             Sample = sample;
             Date = date;
