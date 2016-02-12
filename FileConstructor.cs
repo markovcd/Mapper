@@ -131,20 +131,20 @@ namespace Mapper
             	throw new FileNotFoundException(string.Format("Nie znaleziono pliku {0}", filePath));
 
             using (var source = new ExcelPackage(inputFile))
-            {               
-                OnFileAdding(new FileEventArgs(filePath));
-                AddFile(source.Workbook, date);
-                OnFileAdded(new FileEventArgs(filePath));
-            }
+                AddFile(source, date);
 		}
 
-        public void AddFile(ExcelWorkbook sourceWorkbook, DateTime date)
-	    {           
+        public void AddFile(ExcelPackage source, DateTime date)
+	    {
+            OnFileAdding(new FileEventArgs(source.File.FullName));
+
             foreach (var card in file.Cards)
-                AddCard(card, sourceWorkbook, date);
+                AddCard(card, source, date);
+
+            OnFileAdded(new FileEventArgs(source.File.FullName));
         }
 
-        public void AddCard(Card card, ExcelWorkbook sourceWorkbook, DateTime date)
+        public void AddCard(Card card, ExcelPackage source, DateTime date)
 		{
             OnCardAdding(new CardEventArgs(card));
 
@@ -152,7 +152,7 @@ namespace Mapper
         	
             UpdateSampleRows(card);
 
-            foreach (var v in card.GetCard(sourceWorkbook, date))
+            foreach (var v in card.GetCard(source.Workbook, date))
             	AddSamples(v.Key, v.Value, targetWorksheet);
 
             OnCardAdded(new CardEventArgs(card));

@@ -35,11 +35,7 @@ namespace Mapper
         [XmlIgnore]
         public IEnumerable<string> TargetColumns
         {
-        	get
-        	{
-        		if (targetColumns == null) targetColumns = GetTargetColumns();
-        		return targetColumns;
-        	}
+        	get { return targetColumns ?? (targetColumns = GetTargetColumns()); }
         }
 
         [XmlArrayItem(typeof(RowSample))]
@@ -100,9 +96,7 @@ namespace Mapper
             return Samples.SelectMany(s => s.GetSamples(sourceWorkbook, date))
                           .GroupBy(s => s.Sample)
                           .ToDictionary(g => g.Key, sort);
-        }
-        
-        
+        } 
 
         #region IChildItem<File> Members
 
