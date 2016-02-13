@@ -86,7 +86,7 @@
     <Compile Include="Entities\Sample\Sample.cs" />
     <Compile Include="Entities\SampleEntry.cs" />
     <Compile Include="Entities\Sample\SingleSheetSample.cs" />
-    <Compile Include="FileConstructor.cs" />
+    <Compile Include="ExcelMapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SheetInfo.cs" />

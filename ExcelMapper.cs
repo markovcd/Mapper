@@ -27,9 +27,9 @@ namespace Mapper
     }
 
     /// <summary>
-    /// Description of FileConstructor.
+    /// Description of ExcelMapper.
     /// </summary>
-    public class FileConstructor : IDisposable
+    public class ExcelMapper : IDisposable
 	{
 		private readonly ExcelPackage output;
 		private readonly File file;
@@ -43,7 +43,7 @@ namespace Mapper
         public event EventHandler<CardEventArgs> CardAdding;
         public event EventHandler<CardEventArgs> CardAdded;
 
-        public FileConstructor(string sourceDir, string targetPath, File file, bool append = false)
+        public ExcelMapper(string sourceDir, string targetPath, File file, bool append = false)
 		{
 			SourceDirectory = sourceDir;
 			TargetPath = targetPath;

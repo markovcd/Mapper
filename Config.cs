@@ -35,7 +35,7 @@ namespace Mapper
 			var file = File.LoadXml(ConfigPath);
             if (!string.IsNullOrEmpty(TemplatePath)) file.Name = TemplatePath;
 
-            var constructor = new FileConstructor(SourcePath, TargetPath, file, Append);
+            var constructor = new ExcelMapper(SourcePath, TargetPath, file, Append);
 		    constructor.FileAdding += (s, e) => Console.Write(e.FilePath);
 		    constructor.FileAdded += (s, e) => Console.WriteLine('.');
             constructor.AddFiles(From, To);
