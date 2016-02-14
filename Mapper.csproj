@@ -189,6 +189,9 @@
     <None Include="Mappings\ProduktFespol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Mappings\schema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Mappings\Zbiorczy.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
