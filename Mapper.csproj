@@ -67,9 +67,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChildItemCollection.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="DateEnumerable.cs" />
+    <Compile Include="Utilities\ChildItemCollection.cs" />
+    <Compile Include="Entities\Config.cs" />
+    <Compile Include="Utilities\DateEnumerable.cs" />
     <Compile Include="Entities\Card.cs" />
     <Compile Include="Entities\Mapping\CellMapping.cs" />
     <Compile Include="Entities\Mapping\ColumnMapping.cs" />
@@ -87,15 +87,15 @@
     <Compile Include="Entities\SampleEntry.cs" />
     <Compile Include="Entities\Sample\SingleSheetSample.cs" />
     <Compile Include="ExcelMapper.cs" />
-    <Compile Include="XmlValidator.cs" />
-    <Compile Include="XmlDeserializer.cs" />
+    <Compile Include="Utilities\XmlValidator.cs" />
+    <Compile Include="Utilities\XmlDeserializer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SheetInfo.cs" />
-    <Compile Include="ExcelHelper.cs" />
+    <Compile Include="Entities\SheetInfo.cs" />
+    <Compile Include="Utilities\ExcelHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigSchema.xsd">
+    <EmbeddedResource Include="Schemas\ConfigSchema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Configs\2016-01.xml">
@@ -192,7 +192,7 @@
     <None Include="Mappings\ProduktFespol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="MappingSchema.xsd">
+    <EmbeddedResource Include="Schemas\MappingSchema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Mappings\Zbiorczy.xlsx">
