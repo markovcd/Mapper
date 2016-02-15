@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Mapper
 {
@@ -25,12 +24,8 @@ namespace Mapper
 
 		static public File LoadXml(string filePath)
 		{
-			using (var stream = new StreamReader(filePath))
-			{
-				var serializer = new XmlSerializer(typeof(File));
-				var file = (File)serializer.Deserialize(stream);
-				return file;
-			}			
-		}				
+            XmlValidator.ValidateMapping(filePath);
+            return XmlDeserializer.LoadXml<File>(filePath);
+        }				
 	}
 }

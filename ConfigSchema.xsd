@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:target="http://mapper.com/configs" targetNamespace="http://mapper.com/configs">
-  <element name="ConfigList" nillable="true" type="target:ConfigList" />
-  <complexType name="ConfigList">
-    <sequence>
-      <element minOccurs="0" maxOccurs="1" name="Configs" type="target:ArrayOfConfig" />
-    </sequence>
-  </complexType>
-  <complexType name="ArrayOfConfig">
-    <sequence>
-      <element minOccurs="0" maxOccurs="unbounded" name="Config" nillable="true" type="target:Config" />
-    </sequence>
-  </complexType>
-  <complexType name="Config">
-    <attribute name="From" type="dateTime" use="required" />
-    <attribute name="To" type="dateTime" use="required" />
-    <attribute name="ConfigPath" type="string" use="required" />
-    <attribute name="SourcePath" type="string" use="required" />
-    <attribute name="TemplatePath" type="string" />
-    <attribute name="TargetPath" type="string" use="required" />
-    <attribute name="Append" type="boolean" />
-  </complexType>
-</schema>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ConfigList" nillable="true" type="ConfigList" />
+  <xs:complexType name="ConfigList">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Configs" type="ArrayOfConfig" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfConfig">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Config" nillable="true" type="Config" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Config">
+    <xs:attribute name="From" type="xs:date" use="required" />
+    <xs:attribute name="To" type="xs:date" use="required" />
+    <xs:attribute name="ConfigPath" type="xs:string" use="required" />
+    <xs:attribute name="SourcePath" type="xs:string" use="required" />
+    <xs:attribute name="TemplatePath" type="xs:string" />
+    <xs:attribute name="TargetPath" type="xs:string" use="required" />
+    <xs:attribute name="Append" type="xs:boolean" />
+  </xs:complexType>
+</xs:schema>

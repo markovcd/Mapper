@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using System.IO;
 
 namespace Mapper
 {
@@ -56,12 +55,8 @@ namespace Mapper
 		
 		static public ConfigList LoadXml(string filePath)
 		{
-			using(var xml = new StreamReader(filePath))
-			{
-				var serializer = new XmlSerializer(typeof(ConfigList));
-				var config = (ConfigList)serializer.Deserialize(xml);
-				return config;
-			}
+            XmlValidator.ValidateConfig(filePath);
+            return XmlDeserializer.LoadXml<ConfigList>(filePath);
 		}
 	}
 }

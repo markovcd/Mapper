@@ -7,7 +7,7 @@ namespace Mapper
 {
 	class Program
 	{			
-		public static void Main2(string[] args)
+		public static void Main(string[] args)
 		{
 			var cfg = args.Any() ? args[0] : Console.ReadLine();
 			DateTime date;
