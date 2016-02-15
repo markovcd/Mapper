@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:target="http://mapper.com/configs" targetNamespace="http://mapper.com/configs">
+  <element name="ConfigList" nillable="true" type="target:ConfigList" />
+  <complexType name="ConfigList">
+    <sequence>
+      <element minOccurs="0" maxOccurs="1" name="Configs" type="target:ArrayOfConfig" />
+    </sequence>
+  </complexType>
+  <complexType name="ArrayOfConfig">
+    <sequence>
+      <element minOccurs="0" maxOccurs="unbounded" name="Config" nillable="true" type="target:Config" />
+    </sequence>
+  </complexType>
+  <complexType name="Config">
+    <attribute name="From" type="dateTime" use="required" />
+    <attribute name="To" type="dateTime" use="required" />
+    <attribute name="ConfigPath" type="string" use="required" />
+    <attribute name="SourcePath" type="string" use="required" />
+    <attribute name="TemplatePath" type="string" />
+    <attribute name="TargetPath" type="string" use="required" />
+    <attribute name="Append" type="boolean" />
+  </complexType>
+</schema>

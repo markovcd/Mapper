@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace Mapper
@@ -26,19 +25,12 @@ namespace Mapper
 
 		static public File LoadXml(string filePath)
 		{
-			var stream = new StreamReader(filePath);
-			var serializer = new XmlSerializer(typeof(File));
-			var file = (File)serializer.Deserialize(stream);
-			stream.Close();
-			
-			return file;
+			using (var stream = new StreamReader(filePath))
+			{
+				var serializer = new XmlSerializer(typeof(File));
+				var file = (File)serializer.Deserialize(stream);
+				return file;
+			}			
 		}				
-	
-		public void SaveXml(string filePath)
-		{
-			var serializer = new XmlSerializer(typeof(File));
-			var stream = new StreamWriter(filePath);
-			serializer.Serialize(stream, this);
-		}
 	}
 }

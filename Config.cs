@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace Mapper
 {
@@ -35,11 +36,11 @@ namespace Mapper
 			var file = File.LoadXml(ConfigPath);
             if (!string.IsNullOrEmpty(TemplatePath)) file.Name = TemplatePath;
 
-            var constructor = new ExcelMapper(SourcePath, TargetPath, file, Append);
-		    constructor.FileAdding += (s, e) => Console.Write(e.FilePath);
-		    constructor.FileAdded += (s, e) => Console.WriteLine('.');
-            constructor.AddFiles(From, To);
-			constructor.Dispose();
+            var mapper = new ExcelMapper(SourcePath, TargetPath, file, Append);
+		    mapper.FileAdding += (s, e) => Console.Write(e.FilePath);
+		    mapper.FileAdded += (s, e) => Console.WriteLine('.');
+            mapper.AddFiles(From, To);
+			mapper.Dispose();
 		}
 	}
 	
@@ -47,16 +48,20 @@ namespace Mapper
 	{
 		public List<Config> Configs;
 		
-		public void Add(Config config)
-		{
-			if (Configs == null) Configs = new List<Config>();
-			Configs.Add(config);		
-		}
-		
 		public void Execute()
 		{
 			foreach (var config in Configs) 
 				config.Execute();
+		}
+		
+		static public ConfigList LoadXml(string filePath)
+		{
+			using(var xml = new StreamReader(filePath))
+			{
+				var serializer = new XmlSerializer(typeof(ConfigList));
+				var config = (ConfigList)serializer.Deserialize(xml);
+				return config;
+			}
 		}
 	}
 }

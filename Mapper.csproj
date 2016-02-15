@@ -93,11 +93,12 @@
     <Compile Include="ExcelHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="config.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="ConfigSchema.xsd">
+      <SubType>Designer</SubType>
     </None>
     <None Include="Configs\2016-01.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Configs\2016-02.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -189,7 +190,7 @@
     <None Include="Mappings\ProduktFespol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Mappings\schema.xsd">
+    <None Include="MappingSchema.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Mappings\Zbiorczy.xlsx">

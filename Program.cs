@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Xml.Serialization;
-using System.IO;
+
 using System.Globalization;
 using System.Linq;
 
@@ -8,7 +7,7 @@ namespace Mapper
 {
 	class Program
 	{			
-		public static void Main(string[] args)
+		public static void Main2(string[] args)
 		{
 			var cfg = args.Any() ? args[0] : Console.ReadLine();
 			DateTime date;
@@ -24,13 +23,8 @@ namespace Mapper
 			
 			if (!System.IO.File.Exists(cfg))
 				cfg = cfg + ".xml";
-			    
-			using(var xml = new StreamReader(cfg))
-			{
-				var serializer = new XmlSerializer(typeof(ConfigList));
-				var config = (ConfigList)serializer.Deserialize(xml);
-				config.Execute();
-			}
+			    			
+			ConfigList.LoadXml(cfg).Execute();			
 		}
     }	
 }
