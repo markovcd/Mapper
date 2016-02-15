@@ -8,7 +8,7 @@ namespace Mapper
 {
     public static class XmlValidator
     {
-        private static Stream LoadResource(string fileName, string nameSpace = "Mapper")
+        private static Stream LoadResource(string fileName, string nameSpace = "Mapper.Schemas")
         {
             return Assembly.GetExecutingAssembly().GetManifestResourceStream(nameSpace + "." + fileName);
         }
