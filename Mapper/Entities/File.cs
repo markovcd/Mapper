@@ -3,10 +3,11 @@ using Mapper.Utilities;
 
 namespace Mapper.Entities
 {
-	/// <summary>
-	/// Description of File.
-	/// </summary>
-	public class File
+    /// <summary>
+    /// Description of File.
+    /// </summary>
+    [XmlRoot(Namespace = "http://mapper.com/mappings")]
+    public class File
 	{
 		[XmlAttribute]
 		public string Name { get; set; }

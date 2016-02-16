@@ -1,11 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
+# Visual Studio 2012
+# SharpDevelop 4.4
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapper", "Mapper\Mapper.csproj", "{1E894661-2A35-4898-A998-6DD9FF8B4E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapperConsole", "MapperConsole\MapperConsole.csproj", "{C83EFD2F-ED56-4210-B277-215F016CC758}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapperConsole", "MapperConsole\MapperConsole.csproj", "{2996549C-0FBC-457D-B062-D240357831A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +18,10 @@ Global
 		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E894661-2A35-4898-A998-6DD9FF8B4E13}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C83EFD2F-ED56-4210-B277-215F016CC758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C83EFD2F-ED56-4210-B277-215F016CC758}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C83EFD2F-ED56-4210-B277-215F016CC758}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C83EFD2F-ED56-4210-B277-215F016CC758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2996549C-0FBC-457D-B062-D240357831A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2996549C-0FBC-457D-B062-D240357831A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2996549C-0FBC-457D-B062-D240357831A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2996549C-0FBC-457D-B062-D240357831A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

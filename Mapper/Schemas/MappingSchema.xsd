@@ -1,142 +1,142 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="File" nillable="true" type="File" />
-  <xs:complexType name="File">
-    <xs:all>
-      <xs:element minOccurs="1" maxOccurs="1" name="Cards" type="ArrayOfCard" />
-      <xs:element minOccurs="1" maxOccurs="1" name="InputFileInfo" type="SheetInfo" />
-    </xs:all>
-    <xs:attribute name="Name" type="xs:string" use="required" />
-    <xs:attribute name="Password" type="xs:string" />
-  </xs:complexType>
-  <xs:complexType name="ArrayOfCard">
-    <xs:sequence>
-      <xs:element minOccurs="1" maxOccurs="unbounded" name="Card" nillable="true" type="Card" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="Card">
-    <xs:all>
-      <xs:element minOccurs="0" maxOccurs="1" name="DateFormats" type="ArrayOfString" />
-      <xs:element minOccurs="1" maxOccurs="1" name="Samples" type="ArrayOfChoice2" />
-    </xs:all>
-    <xs:attribute name="Name" type="xs:string" use="required" />
-    <xs:attribute name="TargetDateColumn" type="xs:string" />
-    <xs:attribute name="TargetFirstRow" type="xs:int" />
-    <xs:attribute name="Order" type="Order" />
-  </xs:complexType>
-  <xs:complexType name="ArrayOfString">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ArrayOfChoice2">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="1" maxOccurs="1" name="DateSheetSample" nillable="true" type="DateSheetSample" />
-      <xs:element minOccurs="1" maxOccurs="1" name="RowSample" nillable="true" type="RowSample" />
-      <xs:element minOccurs="1" maxOccurs="1" name="ColumnSample" nillable="true" type="ColumnSample" />
-    </xs:choice>
-  </xs:complexType>
-  <xs:complexType name="DateSheetSample">
-    <xs:complexContent mixed="false">
-      <xs:extension base="Sample">
-        <xs:attribute name="DateFormat" type="xs:string" use="required" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="Sample" abstract="true">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="Mappings" type="ArrayOfChoice1" />
-    </xs:sequence>
-    <xs:attribute name="Name" type="xs:string" use="required" />
-  </xs:complexType>
-  <xs:complexType name="ArrayOfChoice1">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:element minOccurs="1" maxOccurs="1" name="ColumnMapping" nillable="true" type="ColumnMapping" />
-      <xs:element minOccurs="1" maxOccurs="1" name="FormulaMapping" nillable="true" type="FormulaMapping" />
-      <xs:element minOccurs="1" maxOccurs="1" name="CellMapping" nillable="true" type="CellMapping" />
-      <xs:element minOccurs="1" maxOccurs="1" name="ContentMapping" nillable="true" type="ContentMapping" />
-      <xs:element minOccurs="1" maxOccurs="1" name="RowMapping" nillable="true" type="RowMapping" />
-    </xs:choice>
-  </xs:complexType>
-  <xs:complexType name="ColumnMapping">
-    <xs:complexContent mixed="false">
-      <xs:extension base="MovableMapping">
-        <xs:attribute name="SourceColumn" type="xs:string" use="required" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="MovableMapping" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="Mapping" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="Mapping" abstract="true">
-    <xs:attribute name="Caption" type="xs:string" />
-    <xs:attribute name="TargetColumn" type="xs:string" use="required" />
-    <xs:attribute name="IsIgnorable" type="xs:boolean" />
-  </xs:complexType>
-  <xs:complexType name="FormulaMapping">
-    <xs:complexContent mixed="false">
-      <xs:extension base="Mapping">
-        <xs:attribute name="Formula" type="xs:string" use="required" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="ContentMapping">
-    <xs:complexContent mixed="false">
-      <xs:extension base="Mapping">
-        <xs:attribute name="Content" type="xs:string" use="required" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="CellMapping">
-    <xs:complexContent mixed="false">
-      <xs:extension base="Mapping">
-        <xs:attribute name="SourceAddress" type="xs:string" use="required" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="RowMapping">
-    <xs:complexContent mixed="false">
-      <xs:extension base="MovableMapping">
-        <xs:attribute name="SourceRow" type="xs:int" use="required" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="SingleSheetSample" abstract="true">
-    <xs:complexContent mixed="false">
-      <xs:extension base="Sample">
-        <xs:attribute name="SourceCardName" type="xs:string" />
-        <xs:attribute name="SourceFrom" type="xs:string" use="required" />
-        <xs:attribute name="SourceTo" type="xs:string" use="required" />
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="ColumnSample">
-    <xs:complexContent mixed="false">
-      <xs:extension base="SingleSheetSample" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="RowSample">
-    <xs:complexContent mixed="false">
-      <xs:extension base="SingleSheetSample" />
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:simpleType name="Order">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="BySamples" />
-      <xs:enumeration value="ByDates" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="SheetInfo">
-    <xs:attribute name="Pattern" type="xs:string" use="required"/>
-    <xs:attribute name="Period" type="Period" use="required" />
-    <xs:attribute name="Password" type="xs:string" />
-  </xs:complexType>
-  <xs:simpleType name="Period">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="Daily" />
-      <xs:enumeration value="Monthly" />
-    </xs:restriction>
-  </xs:simpleType>
-</xs:schema>
+<schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:target="http://mapper.com/mappings" targetNamespace="http://mapper.com/mappings">
+  <element name="File" nillable="true" type="target:File" />
+  <complexType name="File">
+    <all>
+      <element minOccurs="1" maxOccurs="1" name="Cards" type="target:ArrayOfCard" />
+      <element minOccurs="1" maxOccurs="1" name="InputFileInfo" type="target:SheetInfo" />
+    </all>
+    <attribute name="Name" type="string" use="required" />
+    <attribute name="Password" type="string" />
+  </complexType>
+  <complexType name="ArrayOfCard">
+    <sequence>
+      <element minOccurs="1" maxOccurs="unbounded" name="Card" nillable="true" type="target:Card" />
+    </sequence>
+  </complexType>
+  <complexType name="Card">
+    <all>
+      <element minOccurs="0" maxOccurs="1" name="DateFormats" type="target:ArrayOfString" />
+      <element minOccurs="1" maxOccurs="1" name="Samples" type="target:ArrayOfChoice2" />
+    </all>
+    <attribute name="Name" type="string" use="required" />
+    <attribute name="TargetDateColumn" type="string" />
+    <attribute name="TargetFirstRow" type="int" />
+    <attribute name="Order" type="target:Order" />
+  </complexType>
+  <complexType name="ArrayOfString">
+    <sequence>
+      <element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="string" />
+    </sequence>
+  </complexType>
+  <complexType name="ArrayOfChoice2">
+    <choice minOccurs="0" maxOccurs="unbounded">
+      <element minOccurs="1" maxOccurs="1" name="DateSheetSample" nillable="true" type="target:DateSheetSample" />
+      <element minOccurs="1" maxOccurs="1" name="RowSample" nillable="true" type="target:RowSample" />
+      <element minOccurs="1" maxOccurs="1" name="ColumnSample" nillable="true" type="target:ColumnSample" />
+    </choice>
+  </complexType>
+  <complexType name="DateSheetSample">
+    <complexContent mixed="false">
+      <extension base="target:Sample">
+        <attribute name="DateFormat" type="string" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="Sample" abstract="true">
+    <sequence>
+      <element minOccurs="0" maxOccurs="1" name="Mappings" type="target:ArrayOfChoice1" />
+    </sequence>
+    <attribute name="Name" type="string" use="required" />
+  </complexType>
+  <complexType name="ArrayOfChoice1">
+    <choice minOccurs="0" maxOccurs="unbounded">
+      <element minOccurs="1" maxOccurs="1" name="ColumnMapping" nillable="true" type="target:ColumnMapping" />
+      <element minOccurs="1" maxOccurs="1" name="FormulaMapping" nillable="true" type="target:FormulaMapping" />
+      <element minOccurs="1" maxOccurs="1" name="CellMapping" nillable="true" type="target:CellMapping" />
+      <element minOccurs="1" maxOccurs="1" name="ContentMapping" nillable="true" type="target:ContentMapping" />
+      <element minOccurs="1" maxOccurs="1" name="RowMapping" nillable="true" type="target:RowMapping" />
+    </choice>
+  </complexType>
+  <complexType name="ColumnMapping">
+    <complexContent mixed="false">
+      <extension base="target:MovableMapping">
+        <attribute name="SourceColumn" type="string" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="MovableMapping" abstract="true">
+    <complexContent mixed="false">
+      <extension base="target:Mapping" />
+    </complexContent>
+  </complexType>
+  <complexType name="Mapping" abstract="true">
+    <attribute name="Caption" type="string" />
+    <attribute name="TargetColumn" type="string" use="required" />
+    <attribute name="IsIgnorable" type="boolean" />
+  </complexType>
+  <complexType name="FormulaMapping">
+    <complexContent mixed="false">
+      <extension base="target:Mapping">
+        <attribute name="Formula" type="string" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="ContentMapping">
+    <complexContent mixed="false">
+      <extension base="target:Mapping">
+        <attribute name="Content" type="string" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="CellMapping">
+    <complexContent mixed="false">
+      <extension base="target:Mapping">
+        <attribute name="SourceAddress" type="string" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="RowMapping">
+    <complexContent mixed="false">
+      <extension base="target:MovableMapping">
+        <attribute name="SourceRow" type="int" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="SingleSheetSample" abstract="true">
+    <complexContent mixed="false">
+      <extension base="target:Sample">
+        <attribute name="SourceCardName" type="string" />
+        <attribute name="SourceFrom" type="string" use="required" />
+        <attribute name="SourceTo" type="string" use="required" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="ColumnSample">
+    <complexContent mixed="false">
+      <extension base="target:SingleSheetSample" />
+    </complexContent>
+  </complexType>
+  <complexType name="RowSample">
+    <complexContent mixed="false">
+      <extension base="target:SingleSheetSample" />
+    </complexContent>
+  </complexType>
+  <simpleType name="Order">
+    <restriction base="string">
+      <enumeration value="BySamples" />
+      <enumeration value="ByDates" />
+    </restriction>
+  </simpleType>
+  <complexType name="SheetInfo">
+    <attribute name="Pattern" type="string" use="required"/>
+    <attribute name="Period" type="target:Period" use="required" />
+    <attribute name="Password" type="string" />
+  </complexType>
+  <simpleType name="Period">
+    <restriction base="string">
+      <enumeration value="Daily" />
+      <enumeration value="Monthly" />
+    </restriction>
+  </simpleType>
+</schema>

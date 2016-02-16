@@ -6,10 +6,10 @@ using Mapper.Utilities;
 
 namespace Mapper
 {
-	/// <summary>
-	/// Description of Config.
-	/// </summary>
-	public class Config
+    /// <summary>
+    /// Description of Config.
+    /// </summary>  
+    public class Config
 	{
 		[XmlAttribute]
 		public DateTime From { get; set; }
@@ -44,8 +44,9 @@ namespace Mapper
 			mapper.Dispose();
 		}
 	}
-	
-	public class ConfigList
+
+    [XmlRoot(Namespace = "http://mapper.com/configs")]
+    public class ConfigList
 	{
 		public List<Config> Configs;
 		
