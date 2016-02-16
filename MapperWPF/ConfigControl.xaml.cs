@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
+using Mapper;
 
 namespace MapperWPF
 {
@@ -25,18 +25,18 @@ namespace MapperWPF
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public Config ToConfig()
         {
-            var d = new OpenFileDialog
+            return new Config
             {
-                ValidateNames = true,
-                Multiselect = false,
-                ShowReadOnly = false,
-                CheckFileExists = true
+                From = FromBox.Value.Value,
+                To = ToBox.Value.Value,
+                ConfigPath = ConfigPathBox.Path,
+                SourcePath = SourcePathBox.Path,
+                TemplatePath = templateCheck.IsChecked.Value ? TemplatePathBox.Path : null,
+                TargetPath = TargetPathBox.Path,
+                Append = AppendBox.IsChecked.Value
             };
-
-            d.ShowDialog();
-
         }
     }
 }

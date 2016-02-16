@@ -28,5 +28,10 @@ namespace MapperWPF
 		{
 			InitializeComponent();
 		}
-	}
+
+        private void Launch_Click(object sender, RoutedEventArgs e)
+        {
+            configControl.ToConfig().Execute();
+        }
+    }
 }

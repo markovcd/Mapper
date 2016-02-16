@@ -121,8 +121,10 @@ namespace Mapper
         }
 
         public void AddFiles(DateTime from, DateTime to)
-		{		
-			foreach (var f in file.InputFileInfo.ConstructPaths(SourceDirectory, from, to))
+        {
+            if (from > to) throw new ArgumentException();
+
+            foreach (var f in file.InputFileInfo.ConstructPaths(SourceDirectory, from, to))
                 AddFile(f.Value, f.Key);
 		}
 		

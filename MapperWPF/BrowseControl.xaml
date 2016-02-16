@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="MapperWPF.BrowseControl"
+             x:Name="browseControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,6 +9,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
         <Button Content="..." DockPanel.Dock="Right" Click="Browse_Click"/>
-        <TextBox x:Name="FileText" DockPanel.Dock="Left" HorizontalAlignment="Stretch"/>
+        <TextBox x:Name="FileText" DockPanel.Dock="Left" HorizontalAlignment="Stretch" Text= "{Binding Path, ElementName=browseControl}"/>
     </DockPanel>
 </UserControl>

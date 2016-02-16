@@ -8,6 +8,12 @@
 	Height="421"
 	Width="213"
 >
-<local:ConfigControl />
-    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <local:ConfigControl x:Name="configControl" Grid.Row="0"/>
+        <Button x:Name="Launch" Content="Uruchom" Grid.Row="1" Click="Launch_Click"/>
+    </Grid>
 </Window>

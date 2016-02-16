@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -43,14 +44,27 @@ namespace MapperWPF
             InitializeComponent();
         }
 
-        public BrowseStyle BrowseStyle { get; set; }
-        public string Title { get; set; }
-        public string Filters { get; set; }
+        public BrowseStyle BrowseStyle
+        {
+            get { return (BrowseStyle) GetValue(BrowseStyleProperty); }
+            set { SetValue(BrowseStyleProperty, value);}
+        }
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
+
+        public string Filters
+        {
+            get { return (string)GetValue(FiltersProperty); }
+            set { SetValue(FiltersProperty, value); }
+        }
 
         public string Path
         {
-            get { return FileText.Text; }
-            set { FileText.Text = value; }
+            get { return (string)GetValue(PathProperty); }
+            set { SetValue(PathProperty, value); }
         }
 
         public static readonly DependencyProperty BrowseStyleProperty =
@@ -65,21 +79,33 @@ namespace MapperWPF
         public static readonly DependencyProperty PathProperty =
           DependencyProperty.Register("Path", typeof(string), typeof(BrowseControl));
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void SetValue(DependencyProperty property, object value,
+            [System.Runtime.CompilerServices.CallerMemberName] string p = null)
+        {
+            base.SetValue(property, value);
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(p));
+        }
+
         private IEnumerable<CommonFileDialogFilter> ParseFilters()
         {
+            if (Filters == null) yield break;
+
             var split = Filters.Split('|');
 
             for (var i = 0; i < split.Length - 1; i += 2)
-            {
                 yield return new CommonFileDialogFilter(split[i], split[i + 1]);
-            }
         }
 
         private void Browse_Click(object sender, RoutedEventArgs e)
         {
-            var d = CreateFileDialog();
-            if (d.ShowDialog() == CommonFileDialogResult.Cancel) return;
-            Path = d.FileName;
+            using (var d = CreateFileDialog())
+            {
+                if (d.ShowDialog() == CommonFileDialogResult.Cancel) return;
+                Path = d.FileName;
+            }
         }
 
         private CommonFileDialog CreateFileDialog()
@@ -105,7 +131,11 @@ namespace MapperWPF
             if (d == null) throw new InvalidOperationException();
 
             d.Title = Title;
-            foreach (var f in ParseFilters()) d.Filters.Add(f);
+            d.NavigateToShortcut = true;
+            d.ShowPlacesList = true;
+
+            if (!isDirectory)
+                foreach (var f in ParseFilters()) d.Filters.Add(f);
 
             return d;
         }
