@@ -45,21 +45,19 @@ namespace Mapper
 		}
 	}
 
-    [XmlRoot(Namespace = "http://mapper.com/configs")]
-    public class ConfigList
-	{
-		public List<Config> Configs;
-		
+    [XmlRoot(Namespace = "http://mapper.com/configs", ElementName = "Configs")]
+    public class Configs : List<Config>
+    {
 		public void Execute()
 		{
-			foreach (var config in Configs) 
+			foreach (var config in this) 
 				config.Execute();
 		}
 		
-		static public ConfigList LoadXml(string filePath)
+		static public Configs LoadXml(string filePath)
 		{
             XmlValidator.ValidateConfig(filePath);
-            return XmlDeserializer.LoadXml<ConfigList>(filePath);
+            return XmlDeserializer.LoadXml<Configs>(filePath);
 		}
-	}
+    }
 }

@@ -25,7 +25,7 @@ namespace MapperWPF
             InitializeComponent();
         }
 
-        public Config ToConfig()
+        private Config ToConfig()
         {
             return new Config
             {
@@ -37,6 +37,24 @@ namespace MapperWPF
                 TargetPath = TargetPathBox.Path,
                 Append = AppendBox.IsChecked.Value
             };
+        }
+
+        public Config Config
+        {
+            get { return ToConfig(); }
+            set { FromConfig(value); }
+        }
+
+        private void FromConfig(Config value)
+        {
+            FromBox.Value = value.From;
+            ToBox.Value = value.To;
+            ConfigPathBox.Path = value.ConfigPath;
+            SourcePathBox.Path = value.SourcePath;
+            TemplatePathBox.Path = value.TemplatePath;
+            TargetPathBox.Path = value.TargetPath;
+            AppendBox.IsChecked = value.Append;
+            templateCheck.IsChecked = string.IsNullOrEmpty(value.TemplatePath);
         }
     }
 }

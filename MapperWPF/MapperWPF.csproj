@@ -124,6 +124,9 @@
     <Compile Include="ConfigControl.xaml.cs">
       <DependentUpon>ConfigControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ConfigListControl.xaml.cs">
+      <DependentUpon>ConfigListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\WPFAssemblyInfo.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -137,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfigControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConfigListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

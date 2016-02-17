@@ -9,11 +9,15 @@
 	Width="213"
 >
     <Grid>
+         <Grid.ColumnDefinitions>
+             <ColumnDefinition  />
+            <ColumnDefinition  />
+            <ColumnDefinition  />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            
         </Grid.RowDefinitions>
-        <local:ConfigControl x:Name="configControl" Grid.Row="0"/>
-        <Button x:Name="Launch" Content="Uruchom" Grid.Row="1" Click="Launch_Click"/>
+        <local:ConfigControl x:Name="configControl" Grid.Column="1"/>
+        <Button x:Name="Launch" Content="Uruchom" Click="Launch_Click"/>
     </Grid>
 </Window>

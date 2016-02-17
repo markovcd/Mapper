@@ -31,7 +31,7 @@ namespace MapperWPF
 
         private void Launch_Click(object sender, RoutedEventArgs e)
         {
-            configControl.ToConfig().Execute();
+            configControl.Config.Execute();
         }
     }
 }
