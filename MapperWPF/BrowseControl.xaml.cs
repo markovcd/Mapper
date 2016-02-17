@@ -11,23 +11,6 @@ using Microsoft.WindowsAPICodePack;
 
 namespace MapperWPF
 {
-    public class BrowseStyleConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value.ToString()
-                        .Split(',')
-                        .Select(v => (BrowseStyle) Enum.Parse(typeof (BrowseStyle), v, true))
-                        .Aggregate((e1, e2) => e1 | e2);
-
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     [Flags]
     public enum BrowseStyle
     {

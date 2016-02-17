@@ -24,7 +24,7 @@ namespace MapperConsole
 			if (!System.IO.File.Exists(cfg))
 				cfg = cfg + ".xml";
 			    			
-			ConfigList.LoadXml(cfg).Execute();		
+			Configs.LoadXml(cfg).Execute();		
 		}
     }	
 }

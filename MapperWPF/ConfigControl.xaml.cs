@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
 using Mapper;
 
 namespace MapperWPF
@@ -23,38 +11,15 @@ namespace MapperWPF
         public ConfigControl()
         {
             InitializeComponent();
-        }
+            Config = new Config();
+            DataContext = Config;
+        }    
 
-        private Config ToConfig()
-        {
-            return new Config
-            {
-                From = FromBox.Value.Value,
-                To = ToBox.Value.Value,
-                ConfigPath = ConfigPathBox.Path,
-                SourcePath = SourcePathBox.Path,
-                TemplatePath = templateCheck.IsChecked.Value ? TemplatePathBox.Path : null,
-                TargetPath = TargetPathBox.Path,
-                Append = AppendBox.IsChecked.Value
-            };
-        }
+        public Config Config { get; private set; }
 
-        public Config Config
+        private void templateCheck_Unchecked(object sender, System.Windows.RoutedEventArgs e)
         {
-            get { return ToConfig(); }
-            set { FromConfig(value); }
-        }
-
-        private void FromConfig(Config value)
-        {
-            FromBox.Value = value.From;
-            ToBox.Value = value.To;
-            ConfigPathBox.Path = value.ConfigPath;
-            SourcePathBox.Path = value.SourcePath;
-            TemplatePathBox.Path = value.TemplatePath;
-            TargetPathBox.Path = value.TargetPath;
-            AppendBox.IsChecked = value.Append;
-            templateCheck.IsChecked = string.IsNullOrEmpty(value.TemplatePath);
+            templateBrowse.Path = null;
         }
     }
 }

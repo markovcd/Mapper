@@ -25,18 +25,18 @@ namespace MapperWPF
             InitializeComponent();
         }
 
-        public ConfigList ConfigList
+        public Configs Configs
         {
             get { return ToConfigList(); }
             set { FromConfigList(value); }
         }
 
-        private void FromConfigList(ConfigList value)
+        private void FromConfigList(Configs c)
         {
             throw new NotImplementedException();
         }
 
-        private ConfigList ToConfigList()
+        private Configs ToConfigList()
         {
             throw new NotImplementedException();
         }

@@ -1,18 +1,72 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:target="http://mapper.com/configs" targetNamespace="http://mapper.com/configs">
-  <element name="Configs" nillable="true" type="target:Configs" />
+  <element name="Configs" nillable="true" type="target:Configs" >
+    <annotation>
+      <documentation>
+        Zbiór konfiguracji Mappera wykonywanych sekwencyjnie (od góry do dołu).
+      </documentation>
+    </annotation>
+  </element>
   <complexType name="Configs">
     <sequence>
-      <element minOccurs="0" maxOccurs="unbounded" name="Config" nillable="true" type="target:Config" />
+      <element minOccurs="0" maxOccurs="unbounded" name="Config" nillable="true" type="target:Config">
+        <annotation>
+          <documentation>
+            Pojedyńcza konfiguracja Mappera.
+          </documentation>
+        </annotation>
+      </element>
     </sequence>
   </complexType>
   <complexType name="Config">
-    <attribute name="From" type="date" use="required" />
-    <attribute name="To" type="date" use="required" />
-    <attribute name="ConfigPath" type="string" use="required" />
-    <attribute name="SourcePath" type="string" use="required" />
-    <attribute name="TemplatePath" type="string" />
-    <attribute name="TargetPath" type="string" use="required" />
-    <attribute name="Append" type="boolean" />
+    <attribute name="From" type="date" use="required">
+      <annotation>
+        <documentation>
+          Data w formacie RRRR-MM-DD od kiedy zbierać dane.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute name="To" type="date" use="required">
+      <annotation>
+        <documentation>
+          Data w formacie RRRR-MM-DD do kiedy zbierać dane.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute name="ConfigPath" type="string" use="required">
+      <annotation>
+        <documentation>
+          Ścieżka do pliku konfiguracyjnego Mappera (.xml).
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute name="SourcePath" type="string" use="required">
+      <annotation>
+        <documentation>
+          Ścieżka katalogu z którego zbierane będą dane.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute name="TemplatePath" type="string">
+      <annotation>
+        <documentation>
+          Parametr opcjonalny. Ścieżka do pliku szablonu. Jeżeli nie zostanie podany, użyty zostanie plik określony w pliku konfiguracyjnym.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute name="TargetPath" type="string" use="required">
+      <annotation>
+        <documentation>
+          Docelowa ścieżka wynikowego pliku.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute name="Append" type="boolean">
+      <annotation>
+        <documentation>
+          Czy dopisać dane na koniec pliku (używać z parametrem TemplatePath).
+        </documentation>
+      </annotation>
+    </attribute>
   </complexType>
 </schema>
