@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Mapper;
 using Xceed.Wpf.Toolkit;
 
 namespace MapperWPF
@@ -31,7 +32,7 @@ namespace MapperWPF
 
         private void Launch_Click(object sender, RoutedEventArgs e)
         {
-            configControl.Config.Execute();
+            ((ConfigViewModel)configControl.DataContext).Config.Execute();
         }
     }
 }

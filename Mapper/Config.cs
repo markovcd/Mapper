@@ -59,5 +59,9 @@ namespace Mapper
             XmlValidator.ValidateConfig(filePath);
             return XmlDeserializer.LoadXml<Configs>(filePath);
 		}
+
+        public Configs(IEnumerable<Config> configs) : base(configs) { }
+
+        public Configs() { }
     }
 }

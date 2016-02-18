@@ -11,11 +11,8 @@ namespace MapperWPF
         public ConfigControl()
         {
             InitializeComponent();
-            Config = new Config();
-            DataContext = Config;
+            DataContext = new ConfigViewModel();
         }    
-
-        public Config Config { get; private set; }
 
         private void templateCheck_Unchecked(object sender, System.Windows.RoutedEventArgs e)
         {
