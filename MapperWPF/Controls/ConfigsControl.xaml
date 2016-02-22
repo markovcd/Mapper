@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="MapperWPF.Controls.ConfigsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MapperWPF.Controls"
+             xmlns:viewmodels="clr-namespace:MapperWPF.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="361.756" d:DesignWidth="490.947">
+    
+    <UserControl.DataContext>
+        <viewmodels:ConfigsViewModel/>
+    </UserControl.DataContext>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="125"/>
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        
+        <ListView x:Name="list" 
+                  Grid.Column="0" 
+                  Grid.Row="0" 
+                  ItemsSource="{Binding ConfigViewModels}" 
+                  SelectedItem="{Binding CurrentConfigViewModel}">
+            
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            
+        </ListView>
+        <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
+        <ScrollViewer Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" VerticalScrollBarVisibility="Auto" >
+            <local:ConfigControl  DataContext="{Binding CurrentConfigViewModel}"/>
+        </ScrollViewer>
+        <StackPanel Grid.Column="0" Grid.Row="1"  Orientation="Horizontal">
+            <Button Content="+" Width="20" Command="{Binding AddCommand}"/>
+            <Button Content="-" Width="20" Command="{Binding RemoveCommand}" />
+            <Button Content="↑" Width="20" Command="{Binding MoveUpCommand}" />
+            <Button Content="↓" Width="20" Command="{Binding MoveDownCommand}" />
+            <Button Content="📂" Width="20" Command="{Binding LoadCommand}" />
+            <Button Content="💾" Width="20" Command="{Binding SaveCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

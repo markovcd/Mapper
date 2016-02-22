@@ -118,15 +118,21 @@
       <SubType>Code</SubType>
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BrowseControl.xaml.cs">
+    <Compile Include="Controls\BrowseControl.xaml.cs">
       <DependentUpon>BrowseControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConfigControl.xaml.cs">
+    <Compile Include="Controls\ConfigControl.xaml.cs">
       <DependentUpon>ConfigControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConfigListControl.xaml.cs">
-      <DependentUpon>ConfigListControl.xaml</DependentUpon>
+    <Compile Include="Controls\ConfigsControl.xaml.cs">
+      <DependentUpon>ConfigsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\BrowseStyleToSymbolConverter.cs" />
+    <Compile Include="Utilities\DatePickerWatermarkBehaviour.cs" />
+    <Compile Include="Utilities\DragAdorner.cs" />
+    <Compile Include="Utilities\ListViewDragDropManager.cs" />
+    <Compile Include="Utilities\MouseUtilities.cs" />
+    <Compile Include="Utilities\NullToBooleanConverter.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\WPFAssemblyInfo.cs" />
@@ -139,15 +145,15 @@
     <Compile Include="ViewModels\ConfigViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="BrowseControl.xaml">
+    <Page Include="Controls\BrowseControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfigControl.xaml">
+    <Page Include="Controls\ConfigControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfigListControl.xaml">
+    <Page Include="Controls\ConfigsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

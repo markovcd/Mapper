@@ -1,25 +1,31 @@
 ﻿using System;
 using Mapper;
+using MapperWPF.Utilities;
 
-namespace MapperWPF
+namespace MapperWPF.ViewModels
 {
-    
-    public class ConfigViewModel : ObservableObject
+    public class ConfigViewModel : ObservableObject, ICloneable
     {
-        public ConfigViewModel()
+        public ConfigViewModel(Config config = null)
         {
-            Config = new Config();
+            Config = config ?? new Config();
         }
 
         public Config Config { get; private set; }
 
-        public DateTime From
+        public string Name
+        {
+            get { return Config.Name; }
+            set { Config.Name = value; OnPropertyChanged("Name"); }
+        }
+
+        public DateTime? From
         {
             get { return Config.From; }
             set { Config.From = value; OnPropertyChanged("From"); }
         }
 
-        public DateTime To
+        public DateTime? To
         {
             get { return Config.To; }
             set { Config.To = value; OnPropertyChanged("To"); }
@@ -53,6 +59,21 @@ namespace MapperWPF
         {
             get { return Config.Append; }
             set { Config.Append = value; OnPropertyChanged("Append"); }
+        }
+
+        object ICloneable.Clone()
+        {
+            return Clone();
+        }
+
+        public ConfigViewModel Clone()
+        {
+            return new ConfigViewModel {Config = Config.Clone()};
+        }
+
+        public override string ToString()
+        {
+            return ConfigPath;
         }
     }
 }

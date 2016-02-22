@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 
-namespace MapperWPF
+namespace MapperWPF.Utilities
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {

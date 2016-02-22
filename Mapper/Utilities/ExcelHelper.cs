@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using OfficeOpenXml;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Mapper.Utilities
 {
@@ -126,14 +127,26 @@ namespace Mapper.Utilities
 
             return true;
         }
-
-        public static string ConvertToXlsx(string xlsPath)
+        
+        public static bool IsXlsx(string filePath)
         {
-            var excel = @"c:\Program Files (x86)\Microsoft Office\Office12\excelcnv.exe";
-            var xlsxPath = Path.GetTempFileName() + ".xlsx";
-            var process = Process.Start(excel, string.Format(@" -nme -oice {0} {1}", xlsPath, xlsxPath));
-            process.WaitForExit();
-            return xlsxPath;
+        	return Path.GetExtension(filePath).Equals(".xlsx", StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        public static string ConvertToXlsx(string filePath)
+        {
+        	var excel = new Excel.Application { Visible = false };
+        	var workbook = excel.Workbooks.Open(filePath, UpdateLinks: false, ReadOnly: true);
+        	
+        	var path = Path.GetTempFileName();
+     
+        	workbook.SaveAs(path, FileFormat: Excel.XlFileFormat.xlOpenXMLWorkbook, 
+        	                AccessMode: Excel.XlSaveAsAccessMode.xlNoChange);
+        	
+        	workbook.Close(false);
+        	excel.Quit();
+        	
+        	return path;
         }
 
         public static DateTime ToDate(object value, string[] formats = null)

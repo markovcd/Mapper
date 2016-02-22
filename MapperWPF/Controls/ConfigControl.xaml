@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="MapperWPF.Controls.ConfigControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MapperWPF.Controls"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:utilities="clr-namespace:MapperWPF.Utilities"
+             mc:Ignorable="d" Cursor="None" d:DesignWidth="204">
+    
+    <UserControl.Resources>
+        <utilities:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
+    </UserControl.Resources>
+    
+    <UserControl.IsEnabled>
+        <Binding RelativeSource="{RelativeSource Mode=Self}" Path="DataContext" Converter="{StaticResource NullToBooleanConverter}"/>
+    </UserControl.IsEnabled>
+    
+    <StackPanel>
+        <xctk:WatermarkTextBox Watermark="Nazwa" Margin="5" Text="{Binding Path=Name, Mode=TwoWay}"/>
+
+        <DatePicker SelectedDate="{Binding Path=From, Mode=TwoWay}" 
+                    Margin="5" 
+                    utilities:DatePickerWatermarkBehaviour.Watermark="Od kiedy zbierać dane"/>
+
+        <DatePicker SelectedDate="{Binding Path=To, Mode=TwoWay}" 
+                    Margin="5" 
+                    utilities:DatePickerWatermarkBehaviour.Watermark="Do kiedy zbierać dane" />
+           
+        <local:BrowseControl BrowseStyle="Open,File" 
+                             Title="Wybierz plik konfiguracyjny Mappera" 
+                             Filters="Pliki xml|*.xml|Wszystkie pliki|*.*" 
+                             Path="{Binding Path=ConfigPath, Mode=TwoWay}"
+                             Watermark="Plik konfiguracyjny"
+                             Margin="5" />
+
+        <CheckBox x:Name="AppendBox" 
+                  Content="Dopisz na koniec pliku" 
+                  Margin="5" 
+                  IsChecked="{Binding Path=Append, Mode=TwoWay}" />
+
+        <local:BrowseControl BrowseStyle="Open,Directory" 
+                             Title="Wybierz katalog z którego zaciągane będą dane" 
+                             Path="{Binding Path=SourcePath, Mode=TwoWay}"
+                             Watermark="Katalog źródłowy"
+                             Margin="5" />
+                   
+        <local:BrowseControl BrowseStyle="Save,File" 
+                             Title="Zapisz jako..." 
+                             Filters="Pliki Excel 2007|*.xlsx|Wszystkie pliki|*.*" 
+                             Path="{Binding Path=TargetPath, Mode=TwoWay}"
+                             Watermark="Plik docelowy"
+                             Margin="5"
+                             DefaultExtension=".xlsx" />
+
+        <DockPanel Margin="5">
+            <CheckBox x:Name="templateCheck" 
+                      Unchecked="templateCheck_Unchecked" 
+                      VerticalAlignment="Center" 
+                      IsChecked="{Binding Path=TemplatePath, Mode=TwoWay, Converter={StaticResource NullToBooleanConverter}}" />
+
+            <local:BrowseControl x:Name="templateBrowse" 
+                                 IsEnabled="{Binding ElementName=templateCheck, Path=IsChecked}" 
+                                 BrowseStyle="Open,File" 
+                                 Title="Wybierz plik szablonu (opcjonalnie)" 
+                                 Filters="Pliki Excel 2007|*.xlsx|Wszystkie pliki|*.*"
+                                 Path="{Binding Path=TemplatePath, Mode=TwoWay}"
+                                 Watermark="Plik szablonu" />
+        </DockPanel>
+
+    </StackPanel>
+</UserControl>

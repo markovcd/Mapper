@@ -19,6 +19,13 @@
     </sequence>
   </complexType>
   <complexType name="Config">
+    <attribute name="Name" type="string">
+      <annotation>
+        <documentation>
+          Parametr opcjonalny. Nazwa konfiguracji.
+        </documentation>
+      </annotation>
+    </attribute>
     <attribute name="From" type="date" use="required">
       <annotation>
         <documentation>

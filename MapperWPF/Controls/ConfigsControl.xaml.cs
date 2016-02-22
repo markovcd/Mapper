@@ -12,17 +12,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Mapper;
+using MapperWPF.ViewModels;
+using WPF.JoshSmith.ServiceProviders.UI;
 
-namespace MapperWPF
+namespace MapperWPF.Controls
 {
     /// <summary>
     /// Interaction logic for ConfigListControl.xaml
     /// </summary>
-    public partial class ConfigListControl : UserControl
+    public partial class ConfigsControl : UserControl
     {
-        public ConfigListControl()
+        public ConfigsControl()
         {
             InitializeComponent();
+            list.Tag = new ListViewDragDropManager<ConfigViewModel>(list);
         }
 
         public Configs Configs
@@ -40,5 +43,7 @@ namespace MapperWPF
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

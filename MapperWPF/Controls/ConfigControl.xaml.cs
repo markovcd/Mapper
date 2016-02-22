@@ -1,7 +1,9 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using Mapper;
+using MapperWPF.ViewModels;
 
-namespace MapperWPF
+namespace MapperWPF.Controls
 {
     /// <summary>
     /// Interaction logic for ConfigControl.xaml
@@ -11,10 +13,9 @@ namespace MapperWPF
         public ConfigControl()
         {
             InitializeComponent();
-            DataContext = new ConfigViewModel();
         }    
 
-        private void templateCheck_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        private void templateCheck_Unchecked(object sender, RoutedEventArgs e)
         {
             templateBrowse.Path = null;
         }

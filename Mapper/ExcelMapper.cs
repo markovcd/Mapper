@@ -130,13 +130,20 @@ namespace Mapper
 		
 		public void AddFile(string filePath, DateTime date)
 		{
-            var inputFile = new FileInfo(filePath);
+			bool isXlsx = ExcelHelper.IsXlsx(filePath);
+			
+			if (!isXlsx)
+				filePath = ExcelHelper.ConvertToXlsx(filePath);
+			
+			var inputFile = new FileInfo(filePath);
             
             if (!inputFile.Exists) 
             	throw new FileNotFoundException(string.Format("Nie znaleziono pliku {0}", filePath));
 
             using (var source = new ExcelPackage(inputFile))
                 AddFile(source, date);
+            
+            if (!isXlsx) System.IO.File.Delete(filePath);
 		}
 
         public void AddFile(ExcelPackage source, DateTime date)

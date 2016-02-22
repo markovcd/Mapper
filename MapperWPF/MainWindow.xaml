@@ -4,20 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:local="clr-namespace:MapperWPF"
+    xmlns:controls="clr-namespace:MapperWPF.Controls"
 	Title="MapperWPF"
 	Height="421"
-	Width="213"
->
+	Width="465">
     <Grid>
-         <Grid.ColumnDefinitions>
-             <ColumnDefinition  />
-            <ColumnDefinition  />
-            <ColumnDefinition  />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            
-        </Grid.RowDefinitions>
-        <local:ConfigControl x:Name="configControl" Grid.Column="1"/>
-        <Button x:Name="Launch" Content="Uruchom" Click="Launch_Click"/>
+  
+        <controls:ConfigsControl x:Name="configControl" />
+        
     </Grid>
 </Window>

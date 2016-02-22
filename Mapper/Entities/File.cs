@@ -27,7 +27,7 @@ namespace Mapper.Entities
 		static public File LoadXml(string filePath)
 		{
             XmlValidator.ValidateMapping(filePath);
-            return XmlDeserializer.LoadXml<File>(filePath);
+            return EntitySerializer.Deserialize<File>(filePath);
         }				
 	}
 }

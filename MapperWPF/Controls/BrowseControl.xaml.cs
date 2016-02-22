@@ -8,14 +8,11 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Microsoft.WindowsAPICodePack;
+using MapperWPF.Utilities;
 
-namespace MapperWPF
+namespace MapperWPF.Controls
 {
-    [Flags]
-    public enum BrowseStyle
-    {
-        File = 1, Directory = 2, Open = 4, Save = 8
-    }
+    
 
     /// <summary>
     /// Interaction logic for BrowseControl.xaml
@@ -32,6 +29,7 @@ namespace MapperWPF
             get { return (BrowseStyle) GetValue(BrowseStyleProperty); }
             set { SetValue(BrowseStyleProperty, value);}
         }
+
         public string Title
         {
             get { return (string)GetValue(TitleProperty); }
@@ -44,10 +42,22 @@ namespace MapperWPF
             set { SetValue(FiltersProperty, value); }
         }
 
+        public string DefaultExtension
+        {
+            get { return (string)GetValue(DefaultExtensionProperty); }
+            set { SetValue(DefaultExtensionProperty, value); }
+        }
+
         public string Path
         {
             get { return (string)GetValue(PathProperty); }
             set { SetValue(PathProperty, value); }
+        }
+
+        public string Watermark
+        {
+            get { return (string)GetValue(WatermarkProperty); }
+            set { SetValue(WatermarkProperty, value); }
         }
 
         public static readonly DependencyProperty BrowseStyleProperty =
@@ -59,8 +69,14 @@ namespace MapperWPF
         public static readonly DependencyProperty FiltersProperty =
           DependencyProperty.Register("Filters", typeof(string), typeof(BrowseControl));
 
+        public static readonly DependencyProperty DefaultExtensionProperty =
+          DependencyProperty.Register("DefaultExtension", typeof(string), typeof(BrowseControl));
+
         public static readonly DependencyProperty PathProperty =
           DependencyProperty.Register("Path", typeof(string), typeof(BrowseControl));
+
+        public static readonly DependencyProperty WatermarkProperty =
+          DependencyProperty.Register("Watermark", typeof(string), typeof(BrowseControl));
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -102,13 +118,14 @@ namespace MapperWPF
 
             if (isSave) d = new CommonSaveFileDialog
             {
-                EnsureValidNames = true
+                EnsureValidNames = true,
+                AlwaysAppendDefaultExtension = true,
+                DefaultExtension = DefaultExtension
             };
             if (isOpen) d = new CommonOpenFileDialog
             {
                 IsFolderPicker = isDirectory,
-                EnsureFileExists = true,
-
+                EnsureFileExists = true
             };
 
             if (d == null) throw new InvalidOperationException();
