@@ -43,6 +43,8 @@ namespace Mapper
 
 	    public event EventHandler<FileEventArgs> FileAdding;
         public event EventHandler<FileEventArgs> FileAdded;
+        public event EventHandler<FileEventArgs> Saving;
+        public event EventHandler<FileEventArgs> Saved;
         public event EventHandler<CardEventArgs> CardAdding;
         public event EventHandler<CardEventArgs> CardAdded;
 
@@ -87,7 +89,7 @@ namespace Mapper
 
             for (var row = worksheet.Dimension.Rows; row > sample.Card.TargetFirstRow; row--)
                 if (!sample.Card.IsTargetRowEmpty(row, worksheet))
-                    return row;
+                    return row + 1; 
 			
 			return sample.Card.TargetFirstRow;
 		}
@@ -130,7 +132,7 @@ namespace Mapper
 		
 		public void AddFile(string filePath, DateTime date)
 		{
-			bool isXlsx = ExcelHelper.IsXlsx(filePath);
+			var isXlsx = ExcelHelper.IsXlsx(filePath);
 			
 			if (!isXlsx)
 				filePath = ExcelHelper.ConvertToXlsx(filePath);
@@ -214,7 +216,9 @@ namespace Mapper
 		{
         	if (!string.IsNullOrEmpty(file.Password)) Protect();
         	
+            OnSaving(new FileEventArgs(TargetPath));
         	output.SaveAs(new FileInfo(TargetPath));
+            OnSaved(new FileEventArgs(TargetPath));
             output.Dispose();
 		}
 
@@ -240,6 +244,18 @@ namespace Mapper
         {
             if (CardAdded != null)
                 CardAdded.Invoke(this, e);
+        }
+
+        protected virtual void OnSaving(FileEventArgs e)
+        {
+            if (Saving != null)
+                Saving.Invoke(this, e);
+        }
+
+        protected virtual void OnSaved(FileEventArgs e)
+        {
+            if (Saved != null)
+                Saved.Invoke(this, e);
         }
     }
 }

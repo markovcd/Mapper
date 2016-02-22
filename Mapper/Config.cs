@@ -121,12 +121,55 @@ namespace Mapper
 
         object ICloneable.Clone()
         {
-            return Clone();
+            return this.Clone();
         }
 
         public Configs Clone()
         {
             return new Configs(this.Select(c => c.Clone()));
+        }
+        
+        public Configs LastDay()
+        {
+        	var date = DateTime.Now.AddDays(-1).Date;
+        	return From(date).To(date);
+        }
+        
+        public Configs LastMonth()
+        {
+        	var month = DateTime.Now.AddMonths(-1).Month;
+        	var year = DateTime.Now.AddMonths(-1).Year;
+        	var day = DateTime.DaysInMonth(year, month);
+        	
+        	var from = new DateTime(year, month, 1);
+        	var to = new DateTime(year, month, day);
+        	
+        	return From(from).To(to);
+        }
+        
+        public Configs From(DateTime date)
+        {
+        	return ModifyConfigs(date, (c, d) => c.From = d);
+        }
+        
+        public Configs To(DateTime date)
+        {
+        	return ModifyConfigs(date, (c, d) => c.To = d);
+        }
+        
+        public Configs Append(bool value)
+        {       	
+        	return ModifyConfigs(value, (c, b) => c.Append = b);
+        }
+        
+        private Configs ModifyConfigs<T>(T value, Action<Config, T> action)
+        {
+        	var configs = this.Clone();
+        	
+        	foreach (var config in configs)
+        		action(config, value);
+        	
+        	return configs;
         }
     }
 }

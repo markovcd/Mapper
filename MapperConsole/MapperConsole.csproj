@@ -55,6 +55,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Configs\test.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Configs\2016-01.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -156,6 +159,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Configs\append.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Mappings\Biała.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
