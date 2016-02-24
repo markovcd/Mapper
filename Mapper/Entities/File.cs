@@ -5,6 +5,7 @@ using Mapper.Utilities;
 
 namespace Mapper.Entities
 {
+    
     /// <summary>
     /// Description of File.
     /// </summary>
@@ -18,7 +19,7 @@ namespace Mapper.Entities
 		public string Password { get; set; }
 
         [XmlIgnore]
-        public string XmlPath { get; private set; }
+        public string WorkingDirectory { get; private set; }
 		
 		public ChildItemCollection<File, Card> Cards { get; private set; }
 	
@@ -33,19 +34,19 @@ namespace Mapper.Entities
 		{
             XmlValidator.ValidateMapping(filePath);
             var file = EntitySerializer.Deserialize<File>(filePath);
-		    file.XmlPath = Path.GetFullPath(filePath);
+		    file.WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(filePath));
 		    return file;
 		}
 
         public static string ResolveRelativePath(string referencePath, string relativePath)
         {
             var uri = new Uri(Path.Combine(referencePath, relativePath));
-            return Path.GetFullPath(uri.AbsolutePath);
+            return Path.GetFullPath(uri.LocalPath);
         }
 
         public string ResolveRelativePath(string relativePath)
         {
-            return ResolveRelativePath(XmlPath, relativePath);
+            return ResolveRelativePath(WorkingDirectory, relativePath);
         }
     }
 }

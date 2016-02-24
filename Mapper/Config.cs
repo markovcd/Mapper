@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using Mapper.Entities;
 using Mapper.Utilities;
+using File = Mapper.Entities.File;
 
 namespace Mapper
 {
@@ -100,7 +101,7 @@ namespace Mapper
         public List<Config> List { get; set; }
 
         [XmlIgnore]
-        public string XmlPath { get; private set; }
+        public string WorkingDirectory { get; private set; }
 
         public void Execute()
 		{
@@ -111,14 +112,14 @@ namespace Mapper
 			if (Operation == Operation.AppendLastMonth) LastMonth();
 			if (Operation == Operation.AppendLastWeekend) LastWeekend();
     		
-    		foreach (var config in List) config.Execute(XmlPath);
+    		foreach (var config in List) config.Execute(WorkingDirectory);
 		}
 		
 		static public Configs LoadXml(string filePath)
 		{
             XmlValidator.ValidateConfig(filePath);
             var configs = EntitySerializer.Deserialize<Configs>(filePath);
-		    configs.XmlPath = filePath;
+		    configs.WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(filePath));
 		    return configs;
 		}
 		

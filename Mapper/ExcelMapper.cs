@@ -219,6 +219,7 @@ namespace Mapper
         	if (!string.IsNullOrEmpty(File.Password)) Protect();
         	
             OnSaving(new FileEventArgs(TargetPath));
+            Directory.CreateDirectory(TargetPath);
         	output.SaveAs(new FileInfo(TargetPath));
             OnSaved(new FileEventArgs(TargetPath));
             output.Dispose();
