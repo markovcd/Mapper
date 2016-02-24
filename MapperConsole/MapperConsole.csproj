@@ -55,110 +55,80 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Configs\test.xml">
+    <None Include="Configs\append-month.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-01.xml">
+    </None>
+    <None Include="Configs\Fespol2014.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-02.xml">
+    </None>
+    <None Include="Configs\Biala2015.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-03.xml">
+    </None>
+    <None Include="Configs\Biala2016.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-04.xml">
+    </None>
+    <None Include="Configs\Czarna2015.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-05.xml">
+    </None>
+    <None Include="Configs\Fespol2015.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-06.xml">
+    </None>
+    <None Include="Configs\Pohydrolityczny2015.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-07.xml">
+    </None>
+    <None Include="Configs\Pohydrolityczny2016.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-08.xml">
+    </None>
+    <None Include="Configs\Produkt2015.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-09.xml">
+    </None>
+    <None Include="Configs\ProduktFespol2015.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-10.xml">
+    </None>
+    <None Include="Configs\Zbiorczy.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-11.xml">
+    </None>
+    <None Include="Mappings\Biała.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\2016-12.xml">
+    </None>
+    <None Include="Mappings\Czarna.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\Biala2015.xml">
+    </None>
+    <None Include="Mappings\CzarnaPrzed2015-10-26.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\Biala2016.xml">
+    </None>
+    <None Include="Mappings\Fespol.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\Czarna2015.xml">
+    </None>
+    <None Include="Mappings\Pohydrolityczny.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\Fespol2015.xml">
+    </None>
+    <None Include="Mappings\Produkt.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\Pohydrolityczny2015.xml">
+    </None>
+    <None Include="Mappings\ProduktFespol.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\Pohydrolityczny2016.xml">
+    </None>
+    <None Include="Mappings\ZbiorczyFespol.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\Produkt2015.xml">
+    </None>
+    <None Include="Mappings\ZbiorczyNeutralizacja.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\ProduktFespol2015.xml">
+    </None>
+    <None Include="Mappings\ZbiorczyPohydrolityczny.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\Zbiorczy.xml">
+    </None>
+    <None Include="Mappings\ZbiorczyZatężalnia.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\Biała.xml">
+    </None>
+    <None Include="Mappings\ZbiorczyZatężalnia2016.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\Czarna.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\CzarnaPrzed2015-10-26.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\Fespol.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\Pohydrolityczny.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\Produkt.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\ProduktFespol.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\ZbiorczyFespol.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\ZbiorczyNeutralizacja.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\ZbiorczyPohydrolityczny.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\ZbiorczyZatężalnia.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Mappings\ZbiorczyZatężalnia2016.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Configs\append-weekend.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Configs\append.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -169,6 +139,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Mappings\Fespol.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mappings\FespolOld.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Mappings\Pohydrolityczny.xlsx">

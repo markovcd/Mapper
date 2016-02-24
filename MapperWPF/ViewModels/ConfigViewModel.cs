@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using Mapper;
 using MapperWPF.Utilities;
 
@@ -9,6 +13,9 @@ namespace MapperWPF.ViewModels
         public ConfigViewModel(Config config = null)
         {
             Config = config ?? new Config();
+
+            ConfigPaths = new ObservableCollection<string>(Directory
+                .EnumerateFiles("Mappings", "*.xml", SearchOption.AllDirectories));
         }
 
         public Config Config { get; private set; }
@@ -21,15 +28,25 @@ namespace MapperWPF.ViewModels
 
         public DateTime? From
         {
-            get { return Config.From; }
-            set { Config.From = value; OnPropertyChanged("From"); }
+            get { return Config.From.Equals(DateTime.MinValue) ? null : (DateTime?)Config.From; }
+            set
+            {
+                Config.From = value ?? DateTime.MinValue;
+                OnPropertyChanged("From");
+            }
         }
 
         public DateTime? To
         {
-            get { return Config.To; }
-            set { Config.To = value; OnPropertyChanged("To"); }
+            get { return Config.To.Equals(DateTime.MinValue) ? null : (DateTime?)Config.To; }
+            set
+            {
+                Config.To = value ?? DateTime.MinValue;
+                OnPropertyChanged("To");
+            }
         }
+
+        public ObservableCollection<string> ConfigPaths { get; private set; } 
 
         public string ConfigPath
         {

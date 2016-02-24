@@ -35,11 +35,11 @@ namespace Mapper
     public class ExcelMapper : IDisposable
 	{
 		private readonly ExcelPackage output;
-		private readonly File file;
 		private readonly Dictionary<Sample, int> lastRows;
-	
-		public string SourceDirectory { get; private set; }
-		public string TargetPath { get; private set; }
+
+        public File File { get; set; }
+        public string SourceDirectory { get; set; }
+		public string TargetPath { get; set; }
 
 	    public event EventHandler<FileEventArgs> FileAdding;
         public event EventHandler<FileEventArgs> FileAdded;
@@ -52,19 +52,19 @@ namespace Mapper
 		{
 			SourceDirectory = sourceDir;
 			TargetPath = targetPath;
-	
-			this.file = file;
-		    
-			output = new ExcelPackage(new FileInfo(file.Name));
+			File = file;
+
+            var fileInfo = new FileInfo(File.ResolveRelativePath(File.Name));
+            output = new ExcelPackage(fileInfo);
 
             lastRows = InitSampleRows(append);
 		}
-		
-		private Dictionary<Sample, int> InitSampleRows(bool append = false)
+
+        private Dictionary<Sample, int> InitSampleRows(bool append = false)
 		{
 			var d = new Dictionary<Sample, int>();
 	
-			foreach (var card in file.Cards)
+			foreach (var card in File.Cards)
 			foreach (var sample in card.Samples)
 			{	
 				if (d.ContainsKey(sample)) continue;
@@ -126,13 +126,15 @@ namespace Mapper
         {
             if (from > to) throw new ArgumentException();
 
-            foreach (var f in file.InputFileInfo.ConstructPaths(SourceDirectory, from, to))
+            foreach (var f in File.InputFileInfo.ConstructPaths(SourceDirectory, from, to))
                 AddFile(f.Value, f.Key);
 		}
 		
 		public void AddFile(string filePath, DateTime date)
 		{
-			var isXlsx = ExcelHelper.IsXlsx(filePath);
+		    filePath = File.ResolveRelativePath(filePath);
+
+            var isXlsx = ExcelHelper.IsXlsx(filePath);
 			
 			if (!isXlsx)
 				filePath = ExcelHelper.ConvertToXlsx(filePath);
@@ -152,7 +154,7 @@ namespace Mapper
 	    {
             OnFileAdding(new FileEventArgs(source.File.FullName));
 
-            foreach (var card in file.Cards)
+            foreach (var card in File.Cards)
                 AddCard(card, source, date);
 
             OnFileAdded(new FileEventArgs(source.File.FullName));
@@ -202,11 +204,11 @@ namespace Mapper
     		
 		private void Protect()
 		{
-			var worksheets = file.Cards.Select(c => c.GetTargetWorksheet(output.Workbook));
+			var worksheets = File.Cards.Select(c => c.GetTargetWorksheet(output.Workbook));
 			
 			foreach (var worksheet in worksheets) 
 			{
-				worksheet.Protection.SetPassword(file.Password);
+				worksheet.Protection.SetPassword(File.Password);
 				worksheet.Protection.AllowAutoFilter = true;
 				worksheet.Protection.IsProtected = true;
 			}
@@ -214,7 +216,7 @@ namespace Mapper
 
         public void Dispose()
 		{
-        	if (!string.IsNullOrEmpty(file.Password)) Protect();
+        	if (!string.IsNullOrEmpty(File.Password)) Protect();
         	
             OnSaving(new FileEventArgs(TargetPath));
         	output.SaveAs(new FileInfo(TargetPath));
@@ -257,5 +259,5 @@ namespace Mapper
             if (Saved != null)
                 Saved.Invoke(this, e);
         }
-    }
+	}
 }

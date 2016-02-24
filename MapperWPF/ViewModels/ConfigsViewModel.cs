@@ -113,7 +113,7 @@ namespace MapperWPF.ViewModels
 
 	    public void Load(string filePath)
 	    {
-            ConfigViewModels = new ObservableCollection<ConfigViewModel>(Configs.LoadXml(filePath).Select(c => new ConfigViewModel(c)));
+            ConfigViewModels = new ObservableCollection<ConfigViewModel>(Configs.LoadXml(filePath).List.Select(c => new ConfigViewModel(c)));
         }
 
 	    public void Save(string filePath)

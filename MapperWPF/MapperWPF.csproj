@@ -130,6 +130,7 @@
     <Compile Include="Utilities\BrowseStyleToSymbolConverter.cs" />
     <Compile Include="Utilities\DatePickerWatermarkBehaviour.cs" />
     <Compile Include="Utilities\DragAdorner.cs" />
+    <Compile Include="Utilities\FilePathToFileNameConverter.cs" />
     <Compile Include="Utilities\ListViewDragDropManager.cs" />
     <Compile Include="Utilities\MouseUtilities.cs" />
     <Compile Include="Utilities\NullToBooleanConverter.cs" />

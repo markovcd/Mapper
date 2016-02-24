@@ -9,7 +9,7 @@
   </element>
   <complexType name="Configs">
     <sequence>
-      <element minOccurs="0" maxOccurs="unbounded" name="Config" nillable="true" type="target:Config">
+      <element minOccurs="0" maxOccurs="unbounded" name="List" nillable="true" type="target:Config">
         <annotation>
           <documentation>
             Pojedyńcza konfiguracja Mappera.
@@ -17,6 +17,27 @@
         </annotation>
       </element>
     </sequence>
+	<attribute name="Operation" type="target:Operation">
+  	  <annotation>
+        <documentation>
+          Akcja jaką wykonać na wszystkich elementach Config. Jeżeli jest inna niż 'None' to ignorowane są parametry From, To i Append.
+        </documentation>
+      </annotation>
+  	</attribute>
+	<attribute name="From" type="date">
+  	  <annotation>
+        <documentation>
+          Data w formacie RRRR-MM-DD od kiedy zbierać dane. Wartość dla wszystkich elementów listy.
+        </documentation>
+      </annotation>
+  	</attribute>
+	<attribute name="To" type="date">
+  	  <annotation>
+        <documentation>
+          Data w formacie RRRR-MM-DD do kiedy zbierać dane. Wartość dla wszystkich elementów listy.
+        </documentation>
+      </annotation>
+  	</attribute>
   </complexType>
   <complexType name="Config">
     <attribute name="Name" type="string">
@@ -26,14 +47,14 @@
         </documentation>
       </annotation>
     </attribute>
-    <attribute name="From" type="date" use="required">
+    <attribute name="From" type="date" use="optional">
       <annotation>
         <documentation>
           Data w formacie RRRR-MM-DD od kiedy zbierać dane.
         </documentation>
       </annotation>
     </attribute>
-    <attribute name="To" type="date" use="required">
+    <attribute name="To" type="date" use="optional">
       <annotation>
         <documentation>
           Data w formacie RRRR-MM-DD do kiedy zbierać dane.
@@ -76,4 +97,36 @@
       </annotation>
     </attribute>
   </complexType>
+  <simpleType name="Operation">
+    <restriction base="string">
+      <enumeration value="None">
+        <annotation>
+          <documentation>
+            Wartość domyślna. Brak akcji.
+          </documentation>
+        </annotation>
+      </enumeration>
+      <enumeration value="AppendLastDay">
+        <annotation>
+          <documentation>
+            Parametry From, To, Append są ignorowane. Do pliku wynikowego dodawane są wartości z poprzedniego dnia. Należy ustawić wartość TemplatePath.
+          </documentation>
+        </annotation>
+      </enumeration>
+  	  <enumeration value="AppendLastMonth">
+        <annotation>
+          <documentation>
+            Parametry From, To, Append są ignorowane. Do pliku wynikowego dodawane są wartości z poprzedniego miesiąca. Należy ustawić wartość TemplatePath.
+          </documentation>
+        </annotation>
+      </enumeration>
+  	  <enumeration value="AppendLastWeekend">
+        <annotation>
+          <documentation>
+            Parametry From, To, Append są ignorowane. Do pliku wynikowego dodawane są wartości z poprzedniego weekendu. Należy ustawić wartość TemplatePath.
+          </documentation>
+        </annotation>
+      </enumeration>
+    </restriction>
+  </simpleType>
 </schema>

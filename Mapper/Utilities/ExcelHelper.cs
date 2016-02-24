@@ -138,7 +138,7 @@ namespace Mapper.Utilities
         	var excel = new Excel.Application { Visible = false };
         	var workbook = excel.Workbooks.Open(filePath, UpdateLinks: false, ReadOnly: true);
         	
-        	var path = Path.GetTempFileName();
+        	var path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
      
         	workbook.SaveAs(path, FileFormat: Excel.XlFileFormat.xlOpenXMLWorkbook, 
         	                AccessMode: Excel.XlSaveAsAccessMode.xlNoChange);

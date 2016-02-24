@@ -10,6 +10,7 @@
     
     <UserControl.Resources>
         <utilities:NullToBooleanConverter x:Key="NullToBooleanConverter"/>
+        <utilities:FilePathToFileNameConverter x:Key="FilePathToFileNameConverter"/>
     </UserControl.Resources>
     
     <UserControl.IsEnabled>
@@ -27,12 +28,20 @@
                     Margin="5" 
                     utilities:DatePickerWatermarkBehaviour.Watermark="Do kiedy zbierać dane" />
            
-        <local:BrowseControl BrowseStyle="Open,File" 
+        <!--<local:BrowseControl BrowseStyle="Open,File" 
                              Title="Wybierz plik konfiguracyjny Mappera" 
                              Filters="Pliki xml|*.xml|Wszystkie pliki|*.*" 
                              Path="{Binding Path=ConfigPath, Mode=TwoWay}"
                              Watermark="Plik konfiguracyjny"
-                             Margin="5" />
+                             Margin="5" />-->
+
+        <ComboBox ItemsSource="{Binding Path=ConfigPaths}" SelectedItem="{Binding Path=ConfigPath}" Margin="5">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+                <ContentPresenter Content="{Binding Converter={StaticResource FilePathToFileNameConverter}}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
 
         <CheckBox x:Name="AppendBox" 
                   Content="Dopisz na koniec pliku" 

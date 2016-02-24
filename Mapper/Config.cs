@@ -8,7 +8,12 @@ using Mapper.Utilities;
 
 namespace Mapper
 {
-    /// <summary>
+    public enum Operation
+	{
+		None, AppendLastDay, AppendLastMonth, AppendLastWeekend
+	}
+	
+	/// <summary>
     /// Description of Config.
     /// </summary>  
     public class Config : ICloneable
@@ -16,35 +21,11 @@ namespace Mapper
         [XmlAttribute]
         public string Name { get; set; }
 
-        [XmlIgnore]
-		public DateTime? From { get; set; }
+        [XmlAttribute(DataType = "date")]
+        public DateTime From { get; set; }
 
-        [XmlAttribute(AttributeName = "From", DataType = "date")]
-        public DateTime FromSerializable
-        {
-            get { return From.Value; }
-            set { From = value; }
-        }
-
-        public bool ShouldSerializeFromSerializable()
-        {
-            return From.HasValue;
-        }
-
-        [XmlIgnore]
-        public DateTime? To { get; set; }
-
-        [XmlAttribute(AttributeName = "To", DataType = "date")]
-        public DateTime ToSerializable
-        {
-            get { return To.Value; }
-            set { To = value; }
-        }
-
-        public bool ShouldSerializeToSerializable()
-        {
-            return To.HasValue;
-        }
+        [XmlAttribute(DataType = "date")]
+        public DateTime To { get; set; }
 
         [XmlAttribute]
 		public string ConfigPath { get; set; }
@@ -61,25 +42,32 @@ namespace Mapper
 		[XmlAttribute]
 		public bool Append { get; set; }
 		
-		public void Execute()
+		public void Execute(string xmlPath = null)
 		{
-		    Assert();
+		    xmlPath = xmlPath ?? "";
 
-            var file = File.LoadXml(ConfigPath);
-            if (!string.IsNullOrEmpty(TemplatePath)) file.Name = TemplatePath;
+            Assert();
 
-            var mapper = new ExcelMapper(SourcePath, TargetPath, file, Append);
+            var file = File.LoadXml(File.ResolveRelativePath(xmlPath, ConfigPath));
+
+            if (!string.IsNullOrEmpty(TemplatePath))
+                file.Name = File.ResolveRelativePath(xmlPath, TemplatePath);
+
+            var mapper = new ExcelMapper(
+                File.ResolveRelativePath(xmlPath, SourcePath), 
+                File.ResolveRelativePath(xmlPath, TargetPath), 
+                file, 
+                Append);
+
 		    mapper.FileAdding += (s, e) => Console.Write(e.FilePath);
 		    mapper.FileAdded += (s, e) => Console.WriteLine('.');
-            mapper.AddFiles(From.Value, To.Value);
+            mapper.AddFiles(From, To);
 			mapper.Dispose();
 		}
 
         [DebuggerNonUserCode]
         private void Assert()
         {
-            if (!From.HasValue) throw new ArgumentNullException("From");
-            if (!To.HasValue) throw new ArgumentNullException("To");
             if (string.IsNullOrEmpty(ConfigPath)) throw new ArgumentNullException("ConfigPath");
             if (string.IsNullOrEmpty(SourcePath)) throw new ArgumentNullException("SourcePath");
             if (string.IsNullOrEmpty(TargetPath)) throw new ArgumentNullException("TargetPath");
@@ -97,45 +85,88 @@ namespace Mapper
 	}
 
     [XmlRoot(Namespace = "http://mapper.com/configs", ElementName = "Configs")]
-    public class Configs : List<Config>, ICloneable
+    public class Configs : ICloneable
     {
-		public void Execute()
+		[XmlAttribute]
+		public Operation Operation { get; set; }
+		
+		[XmlAttribute(DataType = "date")]
+		public DateTime From { get; set; }
+		
+		[XmlAttribute(DataType = "date")]
+		public DateTime To { get; set; }
+		
+        [XmlElement("")]
+        public List<Config> List { get; set; }
+
+        [XmlIgnore]
+        public string XmlPath { get; private set; }
+
+        public void Execute()
 		{
-			foreach (var config in this) config.Execute();
+        	if (!From.Equals(DateTime.MinValue)) SetFrom(From);
+        	if (!To.Equals(DateTime.MinValue)) SetTo(To);
+        	
+        	if (Operation == Operation.AppendLastDay) LastDay();
+			if (Operation == Operation.AppendLastMonth) LastMonth();
+			if (Operation == Operation.AppendLastWeekend) LastWeekend();
+    		
+    		foreach (var config in List) config.Execute(XmlPath);
 		}
 		
 		static public Configs LoadXml(string filePath)
 		{
             XmlValidator.ValidateConfig(filePath);
-            return EntitySerializer.Deserialize<Configs>(filePath);
+            var configs = EntitySerializer.Deserialize<Configs>(filePath);
+		    configs.XmlPath = filePath;
+		    return configs;
 		}
 		
 		public void SaveXml(string filePath)
 		{
 			EntitySerializer.Serialize(this, filePath);
+			XmlValidator.ValidateConfig(filePath);
 		}
-		
-        public Configs(IEnumerable<Config> configs) : base(configs) { }
 
-        public Configs() { }
+        public Configs(IEnumerable<Config> configs)
+        {
+            List = new List<Config>(configs);
+        }
+
+        public Configs()
+        {
+            List = new List<Config>();
+        }
 
         object ICloneable.Clone()
         {
-            return this.Clone();
+            return Clone();
         }
 
         public Configs Clone()
         {
-            return new Configs(this.Select(c => c.Clone()));
+            return new Configs(List.Select(c => c.Clone()));
         }
         
-        public Configs LastDay()
+        public void LastDay()
         {
         	var date = DateTime.Now.AddDays(-1).Date;
-        	return From(date).To(date);
+        	SetFrom(date);
+        	SetTo(date);
+        	SetAppend();
         }
         
-        public Configs LastMonth()
+        public void LastWeekend()
+        {
+        	var sunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+        	var friday = sunday.AddDays(-2);
+        	
+			SetFrom(friday);
+        	SetTo(sunday);
+        	SetAppend();
+        }
+        
+        public void LastMonth()
         {
         	var month = DateTime.Now.AddMonths(-1).Month;
         	var year = DateTime.Now.AddMonths(-1).Year;
@@ -144,32 +175,35 @@ namespace Mapper
         	var from = new DateTime(year, month, 1);
         	var to = new DateTime(year, month, day);
         	
-        	return From(from).To(to);
+        	SetFrom(from);
+        	SetTo(to);
+        	SetAppend();
         }
         
-        public Configs From(DateTime date)
+        public void SetFrom(DateTime date)
         {
-        	return ModifyConfigs(date, (c, d) => c.From = d);
+        	ModifyConfigs(date, (c, d) => c.From = d);
         }
         
-        public Configs To(DateTime date)
+        public void SetTo(DateTime date)
         {
-        	return ModifyConfigs(date, (c, d) => c.To = d);
+        	ModifyConfigs(date, (c, d) => c.To = d);
         }
         
-        public Configs Append(bool value)
+        public void SetAppend(bool value = true)
         {       	
-        	return ModifyConfigs(value, (c, b) => c.Append = b);
+        	ModifyConfigs(value, (c, b) => c.Append = b);
         }
         
-        private Configs ModifyConfigs<T>(T value, Action<Config, T> action)
+        public void ModifyConfigs<T>(T value, Action<Config, T> action)
         {
-        	var configs = this.Clone();
-        	
-        	foreach (var config in configs)
-        		action(config, value);
-        	
-        	return configs;
+        	foreach (var config in List)
+        		action(config, value);        	
+        }
+
+        public void Add(Config c)
+        {
+            List.Add(c);
         }
     }
 }
