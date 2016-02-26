@@ -10,22 +10,9 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -34,8 +21,6 @@
     <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <StartAction>Project</StartAction>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -44,24 +29,15 @@
     <Optimize>True</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <StartAction>Project</StartAction>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+    <Reference Include="EPPlus">
       <HintPath>packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel" />
+    <Reference Include="office" />
     <Reference Include="System" />
     <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
@@ -70,39 +46,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utilities\ChildItemCollection.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Utilities\DateEnumerable.cs" />
     <Compile Include="Entities\Card.cs" />
+    <Compile Include="Entities\File.cs" />
+    <Compile Include="Entities\MappingEntry.cs" />
     <Compile Include="Entities\Mapping\CellMapping.cs" />
     <Compile Include="Entities\Mapping\ColumnMapping.cs" />
-    <Compile Include="Entities\Sample\ColumnSample.cs" />
     <Compile Include="Entities\Mapping\ContentMapping.cs" />
-    <Compile Include="Entities\Sample\DateSheetSample.cs" />
-    <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\Mapping\FormulaMapping.cs" />
     <Compile Include="Entities\Mapping\Mapping.cs" />
-    <Compile Include="Entities\MappingEntry.cs" />
     <Compile Include="Entities\Mapping\MovableMapping.cs" />
     <Compile Include="Entities\Mapping\RowMapping.cs" />
+    <Compile Include="Entities\SampleEntry.cs" />
+    <Compile Include="Entities\Sample\ColumnSample.cs" />
+    <Compile Include="Entities\Sample\DateSheetSample.cs" />
     <Compile Include="Entities\Sample\RowSample.cs" />
     <Compile Include="Entities\Sample\Sample.cs" />
-    <Compile Include="Entities\SampleEntry.cs" />
     <Compile Include="Entities\Sample\SingleSheetSample.cs" />
-    <Compile Include="ExcelMapper.cs" />
-    <Compile Include="Utilities\XmlValidator.cs" />
-    <Compile Include="Utilities\EntitySerializer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\SheetInfo.cs" />
+    <Compile Include="ExcelMapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ChildItemCollection.cs" />
+    <Compile Include="Utilities\DateEnumerable.cs" />
+    <Compile Include="Utilities\EntitySerializer.cs" />
     <Compile Include="Utilities\ExcelHelper.cs" />
+    <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Schemas\ConfigSchema.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Schemas\MappingSchema.xsd">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

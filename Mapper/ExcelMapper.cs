@@ -6,6 +6,7 @@ using Mapper.Entities;
 using Mapper.Utilities;
 using OfficeOpenXml;
 using File = Mapper.Entities.File;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Mapper
 {
@@ -36,6 +37,7 @@ namespace Mapper
 	{
 		private readonly ExcelPackage output;
 		private readonly Dictionary<Sample, int> lastRows;
+        private readonly Excel.Application excel;
 
         public File File { get; set; }
         public string SourceDirectory { get; set; }
@@ -58,6 +60,9 @@ namespace Mapper
             output = new ExcelPackage(fileInfo);
 
             lastRows = InitSampleRows(append);
+
+            if (File.InputFileInfo.IsXlsx())
+                excel = ExcelHelper.CreateExcel();
 		}
 
         private Dictionary<Sample, int> InitSampleRows(bool append = false)
@@ -137,7 +142,7 @@ namespace Mapper
             var isXlsx = ExcelHelper.IsXlsx(filePath);
 			
 			if (!isXlsx)
-				filePath = ExcelHelper.ConvertToXlsx(filePath);
+				filePath = ExcelHelper.ConvertToXlsx(filePath, excel);
 			
 			var inputFile = new FileInfo(filePath);
             
@@ -215,8 +220,10 @@ namespace Mapper
 		}
 
         public void Dispose()
-		{
-        	if (!string.IsNullOrEmpty(File.Password)) Protect();
+        {
+            excel.Quit();
+
+            if (!string.IsNullOrEmpty(File.Password)) Protect();
         	
             OnSaving(new FileEventArgs(TargetPath));
             Directory.CreateDirectory(TargetPath);

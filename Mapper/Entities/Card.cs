@@ -59,11 +59,7 @@ namespace Mapper.Entities
 			TargetDateColumn = "A";
             Samples = new ChildItemCollection<Card, Sample>(this);
             
-            DateFormats = new List<string> 
-            {
-            	"yyyy-MM-dd", "dd-MM-yyyy", "dd.MM.yyyy", "dd,MM,yyyy", "dd.MM,yyyy", 
-            	"dd,MM.yyyy", "dd MM yyyy", "yyyy.MM.dd", "d.MM.yyyy"
-            };
+            DateFormats = new List<string> { "yyyy-MM-dd" };
         }
 		
 		public ExcelRange GetDateCell(int row, ExcelWorksheet worksheet)

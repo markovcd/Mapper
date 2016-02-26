@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using OfficeOpenXml;
 using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Core;
 
 namespace Mapper.Utilities
 {
@@ -133,10 +133,11 @@ namespace Mapper.Utilities
         	return Path.GetExtension(filePath).Equals(".xlsx", StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public static string ConvertToXlsx(string filePath)
+        public static string ConvertToXlsx(string filePath, Excel.Application excel = null)
         {
-        	var excel = new Excel.Application { Visible = false };
-        	var workbook = excel.Workbooks.Open(filePath, UpdateLinks: false, ReadOnly: true);
+            excel = excel ?? CreateExcel();
+
+            var workbook = excel.Workbooks.Open(filePath, UpdateLinks: false, ReadOnly: true);
         	
         	var path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
      
@@ -147,6 +148,18 @@ namespace Mapper.Utilities
         	excel.Quit();
         	
         	return path;
+        }
+
+        public static Excel.Application CreateExcel()
+        {
+            return new Excel.Application
+            {
+                Visible = false,
+                AskToUpdateLinks = false,
+                DisplayAlerts = false,
+                AutomationSecurity = MsoAutomationSecurity.msoAutomationSecurityForceDisable,
+                FileValidation = MsoFileValidationMode.msoFileValidationSkip
+            };
         }
 
         public static DateTime ToDate(object value, string[] formats = null)

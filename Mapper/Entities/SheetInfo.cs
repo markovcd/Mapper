@@ -30,5 +30,10 @@ namespace Mapper.Entities
 	    {
 	        return new DateEnumerable(Period, from, to).ToDictionary(d => d, d => ConstructPath(rootPath, d));
 	    }
+
+	    public bool IsXlsx()
+	    {
+	        return ExcelHelper.IsXlsx(ConstructPath("c:\\", DateTime.Today));
+	    }
 	}
 }

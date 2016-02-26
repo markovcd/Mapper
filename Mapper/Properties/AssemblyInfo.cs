@@ -10,11 +10,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Mapper")]
-[assembly: AssemblyDescription("Collects data from multiple .xlsx files and makes single file report")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Arkadiusz Markowski markovcd@gmail.com")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Mapper")]
-[assembly: AssemblyCopyright("Copyright 2016 Arkadiusz Markowski")]
+[assembly: AssemblyCopyright("Copyright 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
