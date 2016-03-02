@@ -10,7 +10,7 @@
 	Width="465">
     <Grid>
   
-        <controls:ConfigsControl x:Name="configControl" />
+        <controls:ConfigLauncherControl x:Name="configControl" />
         
     </Grid>
 </Window>

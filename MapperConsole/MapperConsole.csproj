@@ -58,6 +58,12 @@
     <None Include="Configs\append-month.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Configs\Biala2014.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configs\Czarna2014.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Configs\Fespol2014.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -97,7 +103,13 @@
     <None Include="Mappings\Biała.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Mappings\BiałaOld.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Mappings\Czarna.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Mappings\CzarnaOld.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Mappings\CzarnaPrzed2015-10-26.xml">

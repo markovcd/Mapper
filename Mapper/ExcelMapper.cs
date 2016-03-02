@@ -61,7 +61,7 @@ namespace Mapper
 
             lastRows = InitSampleRows(append);
 
-            if (File.InputFileInfo.IsXlsx())
+            if (!File.InputFileInfo.IsXlsx())
                 excel = ExcelHelper.CreateExcel();
 		}
 
@@ -136,33 +136,29 @@ namespace Mapper
 		}
 		
 		public void AddFile(string filePath, DateTime date)
-		{
-		    filePath = File.ResolveRelativePath(filePath);
+		{		   
+			filePath = File.ResolveRelativePath(filePath);
+			
+			OnFileAdding(new FileEventArgs(filePath));
 
-            var isXlsx = ExcelHelper.IsXlsx(filePath);
+            var isXlsx = File.InputFileInfo.IsXlsx();
 			
 			if (!isXlsx)
 				filePath = ExcelHelper.ConvertToXlsx(filePath, excel);
 			
-			var inputFile = new FileInfo(filePath);
-            
-            if (!inputFile.Exists) 
-            	throw new FileNotFoundException(string.Format("Nie znaleziono pliku {0}", filePath));
-
-            using (var source = new ExcelPackage(inputFile))
+			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var source = new ExcelPackage(stream))
                 AddFile(source, date);
             
             if (!isXlsx) System.IO.File.Delete(filePath);
+            
+            OnFileAdded(new FileEventArgs(filePath));
 		}
 
         public void AddFile(ExcelPackage source, DateTime date)
-	    {
-            OnFileAdding(new FileEventArgs(source.File.FullName));
-
+	    {   
             foreach (var card in File.Cards)
-                AddCard(card, source, date);
-
-            OnFileAdded(new FileEventArgs(source.File.FullName));
+                AddCard(card, source, date);          
         }
 
         public void AddCard(Card card, ExcelPackage source, DateTime date)
@@ -221,12 +217,12 @@ namespace Mapper
 
         public void Dispose()
         {
-            excel.Quit();
+        	if (excel != null) excel.Quit();
 
             if (!string.IsNullOrEmpty(File.Password)) Protect();
         	
             OnSaving(new FileEventArgs(TargetPath));
-            Directory.CreateDirectory(TargetPath);
+            Directory.CreateDirectory(Path.GetDirectoryName(TargetPath));
         	output.SaveAs(new FileInfo(TargetPath));
             OnSaved(new FileEventArgs(TargetPath));
             output.Dispose();

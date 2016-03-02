@@ -17,13 +17,13 @@ namespace MapperWPF.ViewModels
         public ObservableCollection<ConfigViewModel> ConfigViewModels
         {
             get { return configViewModels; }
-            set { configViewModels = value; OnPropertyChanged("ConfigViewModels"); }
+            set { configViewModels = value; RaisePropertyChanged("ConfigViewModels"); }
         }
         
         public ConfigViewModel CurrentConfigViewModel
 	    {
 	        get { return currentConfigViewModel; }
-            set { currentConfigViewModel = value; OnPropertyChanged("CurrentConfigViewModel"); }
+            set { currentConfigViewModel = value; RaisePropertyChanged("CurrentConfigViewModel"); }
 	    }
 
         public RelayCommand MoveUpCommand { get; private set; }

@@ -72,9 +72,13 @@
     <Compile Include="Utilities\ExcelHelper.cs" />
     <Compile Include="Utilities\XmlValidator.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Schemas" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <EmbeddedResource Include="Schemas\ConfigSchema.xsd" />
+    <EmbeddedResource Include="Schemas\MappingSchema.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

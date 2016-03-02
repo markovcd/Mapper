@@ -23,7 +23,7 @@ namespace MapperWPF.ViewModels
         public string Name
         {
             get { return Config.Name; }
-            set { Config.Name = value; OnPropertyChanged("Name"); }
+            set { Config.Name = value; RaisePropertyChanged("Name"); }
         }
 
         public DateTime? From
@@ -32,7 +32,7 @@ namespace MapperWPF.ViewModels
             set
             {
                 Config.From = value ?? DateTime.MinValue;
-                OnPropertyChanged("From");
+                RaisePropertyChanged("From");
             }
         }
 
@@ -42,7 +42,7 @@ namespace MapperWPF.ViewModels
             set
             {
                 Config.To = value ?? DateTime.MinValue;
-                OnPropertyChanged("To");
+                RaisePropertyChanged("To");
             }
         }
 
@@ -51,31 +51,31 @@ namespace MapperWPF.ViewModels
         public string ConfigPath
         {
             get { return Config.ConfigPath; }
-            set { Config.ConfigPath = value; OnPropertyChanged("ConfigPath"); }
+            set { Config.ConfigPath = value; RaisePropertyChanged("ConfigPath"); }
         }
 
         public string SourcePath
         {
             get { return Config.SourcePath; }
-            set { Config.SourcePath = value; OnPropertyChanged("SourcePath"); }
+            set { Config.SourcePath = value; RaisePropertyChanged("SourcePath"); }
         }
 
         public string TemplatePath
         {
             get { return Config.TemplatePath; }
-            set { Config.TemplatePath = value; OnPropertyChanged("TemplatePath"); }
+            set { Config.TemplatePath = value; RaisePropertyChanged("TemplatePath"); }
         }
 
         public string TargetPath
         {
             get { return Config.TargetPath; }
-            set { Config.TargetPath = value; OnPropertyChanged("TargetPath"); }
+            set { Config.TargetPath = value; RaisePropertyChanged("TargetPath"); }
         }
 
         public bool Append
         {
             get { return Config.Append; }
-            set { Config.Append = value; OnPropertyChanged("Append"); }
+            set { Config.Append = value; RaisePropertyChanged("Append"); }
         }
 
         object ICloneable.Clone()
