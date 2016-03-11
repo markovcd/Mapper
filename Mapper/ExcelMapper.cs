@@ -65,6 +65,7 @@ namespace Mapper
                 excel = ExcelHelper.CreateExcel();
 		}
 
+
         private Dictionary<Sample, int> InitSampleRows(bool append = false)
 		{
 			var d = new Dictionary<Sample, int>();
@@ -132,10 +133,10 @@ namespace Mapper
             if (from > to) throw new ArgumentException();
 
             foreach (var f in File.InputFileInfo.ConstructPaths(SourceDirectory, from, to))
-                AddFile(f.Value, f.Key);
+                AddFile(f.Value, f.Key, from, to);
 		}
 		
-		public void AddFile(string filePath, DateTime date)
+		public void AddFile(string filePath, DateTime date, DateTime from, DateTime to)
 		{		   
 			filePath = File.ResolveRelativePath(filePath);
 			
@@ -148,20 +149,20 @@ namespace Mapper
 			
 			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var source = new ExcelPackage(stream))
-                AddFile(source, date);
+                AddFile(source, date, from, to);
             
             if (!isXlsx) System.IO.File.Delete(filePath);
             
             OnFileAdded(new FileEventArgs(filePath));
 		}
 
-        public void AddFile(ExcelPackage source, DateTime date)
+        public void AddFile(ExcelPackage source, DateTime date, DateTime from, DateTime to)
 	    {   
             foreach (var card in File.Cards)
-                AddCard(card, source, date);          
+                AddCard(card, source, date, from, to);          
         }
 
-        public void AddCard(Card card, ExcelPackage source, DateTime date)
+        public void AddCard(Card card, ExcelPackage source, DateTime date, DateTime from, DateTime to)
 		{
             OnCardAdding(new CardEventArgs(card));
 
@@ -170,7 +171,10 @@ namespace Mapper
             UpdateSampleRows(card);
 
             foreach (var v in card.GetCard(source.Workbook, date))
-            	AddSamples(v.Key, v.Value, targetWorksheet);
+            	AddSamples(
+            		v.Key, 
+            		v.Value.Where(s => s.Date >= from && s.Date <= to), 
+            		targetWorksheet);
 
             OnCardAdded(new CardEventArgs(card));
         }
@@ -180,7 +184,7 @@ namespace Mapper
         	foreach (var entry in entries) 
         	{
         		if (GetLastRow(sample) > sample.Card.TargetFirstRow)
-                AddNextRow(sample, targetWorksheet);
+                    AddNextRow(sample, targetWorksheet);
 
 	            FillDate(entry.Date, targetWorksheet, sample);
 	            
@@ -198,8 +202,10 @@ namespace Mapper
 
         	    if (m.IsFormula)  
         	        target.Formula = m.Value.ToString();     	   
-        	    else
-        	    	target.Value = m.Mapping.IsDateColumnMapping() ? m.ToDate() : m.Value;
+        	    else if (m.Mapping.IsDateColumnMapping() && m.Value != null)
+        	    	target.Value = m.ToDate();
+        	    else if (!m.Mapping.IsDateColumnMapping())
+        	    	target.Value = m.Value;
         	}
         }
     		

@@ -19,6 +19,12 @@ namespace Mapper.Utilities
             From = from;
             To = to;
             Interval = interval;
+            
+            if (Period == Period.Monthly)
+            {
+            	From = new DateTime(From.Year, From.Month, 1);
+            	To = new DateTime(To.Year, To.Month, DateTime.DaysInMonth(To.Year, To.Month));
+            }
         }
 
         private DateTime Add(DateTime d)

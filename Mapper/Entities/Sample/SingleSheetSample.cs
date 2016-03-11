@@ -44,7 +44,7 @@ namespace Mapper.Entities
 
             return Enumerable.Range(from, to - from + 1)
                              .Where(i => !IsSourceEmpty(i, sourceWorksheet))
-                               .Select(i => new SampleEntry(this, sourceWorksheet, date, i));
+                             .Select(i => new SampleEntry(this, sourceWorksheet, date, i));
         }
     }
 }

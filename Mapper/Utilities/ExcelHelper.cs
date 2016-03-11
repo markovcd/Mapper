@@ -164,7 +164,8 @@ namespace Mapper.Utilities
 
         public static DateTime ToDate(object value, string[] formats = null)
         {
-            if (value is DateTime) return (DateTime)value;
+        	if (value == null) return DateTime.MinValue;
+        	if (value is DateTime) return (DateTime)value;
             if (value is double) return DateTime.FromOADate((double)value);
 
             if (!(value is string)) return (DateTime) Convert.ChangeType(value, TypeCode.DateTime);
