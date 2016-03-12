@@ -15,12 +15,8 @@ namespace Mapper.Entities
         {
             Entries = sample.Mappings.Select(m => new MappingEntry(m, sourceWorksheet, index));
 
-            var dateMapping = sample.GetDateColumnMapping();
-            if (dateMapping != null)
-            {
-            	var date2 = new MappingEntry(dateMapping, sourceWorksheet, index).ToDate();
-            	if (date2 != DateTime.MinValue) date = date2;
-            }
+            var dateMapping = Entries.FirstOrDefault(e => e.Mapping.IsDateColumnMapping());
+            if (dateMapping != null) date = (DateTime)dateMapping.Value;
 
             Sample = sample;
             Date = date;

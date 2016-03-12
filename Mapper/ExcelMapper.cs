@@ -57,6 +57,10 @@ namespace Mapper
 			File = file;
 
             var fileInfo = new FileInfo(File.ResolveRelativePath(File.Name));
+            
+            if (!fileInfo.Exists)
+            	throw new FileNotFoundException(String.Format("Nie znaleziono pliku szablonu: {0}.", fileInfo.FullName));
+            	
             output = new ExcelPackage(fileInfo);
 
             lastRows = InitSampleRows(append);
@@ -202,9 +206,7 @@ namespace Mapper
 
         	    if (m.IsFormula)  
         	        target.Formula = m.Value.ToString();     	   
-        	    else if (m.Mapping.IsDateColumnMapping() && m.Value != null)
-        	    	target.Value = m.ToDate();
-        	    else if (!m.Mapping.IsDateColumnMapping())
+        	    else if ((m.Mapping.IsDateColumnMapping() && m.Value != null) || !m.Mapping.IsDateColumnMapping())
         	    	target.Value = m.Value;
         	}
         }

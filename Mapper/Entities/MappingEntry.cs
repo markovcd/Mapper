@@ -32,11 +32,9 @@ namespace Mapper.Entities
                 throw new InvalidOperationException("Nieznany rodzaj próbki.");
 
             Mapping = mapping;
-        }
-        
-        public DateTime ToDate()
-        {
-        	return ExcelHelper.ToDate(Value, Mapping.Sample.Card.DateFormats.ToArray());
+
+            if (mapping.IsDateColumnMapping() && Value != null) 
+            	Value = ExcelHelper.ToDate(Value, Mapping.Sample.Card.DateFormats.ToArray());
         }
     }
 }
