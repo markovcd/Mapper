@@ -38,6 +38,13 @@
         </documentation>
       </annotation>
   	</attribute>
+    <attribute name="SourcePath" type="string" use="optional">
+      <annotation>
+        <documentation>
+          Ścieżka katalogu z którego zbierane będą dane.
+        </documentation>
+      </annotation>
+    </attribute>
   </complexType>
   <complexType name="Config">
     <attribute name="Name" type="string">
@@ -68,7 +75,7 @@
         </documentation>
       </annotation>
     </attribute>
-    <attribute name="SourcePath" type="string" use="required">
+    <attribute name="SourcePath" type="string" use="optional">
       <annotation>
         <documentation>
           Ścieżka katalogu z którego zbierane będą dane.

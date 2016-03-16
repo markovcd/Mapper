@@ -148,8 +148,7 @@ namespace Mapper
 
             var isXlsx = File.InputFileInfo.IsXlsx();
 			
-			if (!isXlsx)
-				filePath = ExcelHelper.ConvertToXlsx(filePath, excel);
+			if (!isXlsx) filePath = ExcelHelper.ConvertToXlsx(filePath, excel);
 			
 			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var source = new ExcelPackage(stream))

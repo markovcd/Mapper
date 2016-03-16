@@ -88,10 +88,14 @@ namespace Mapper
     [XmlRoot(Namespace = "http://mapper.com/configs", ElementName = "Configs")]
     public class Configs : ICloneable
     {
-		[XmlAttribute]
+
+        [XmlAttribute]
 		public Operation Operation { get; set; }
-		
-		[XmlAttribute(DataType = "date")]
+
+        [XmlAttribute]
+        public string SourcePath { get; set; }
+
+        [XmlAttribute(DataType = "date")]
 		public DateTime From { get; set; }
 		
 		[XmlAttribute(DataType = "date")]
@@ -107,6 +111,7 @@ namespace Mapper
 		{
         	if (!From.Equals(DateTime.MinValue)) SetFrom(From);
         	if (!To.Equals(DateTime.MinValue)) SetTo(To);
+            if (!string.IsNullOrEmpty(SourcePath)) SetSourcePath(SourcePath);
         	
         	if (Operation == Operation.AppendLastDay) LastDay();
 			if (Operation == Operation.AppendLastMonth) LastMonth();
@@ -196,6 +201,11 @@ namespace Mapper
         	ModifyConfigs(value, (c, b) => c.Append = b);
         }
         
+        public void SetSourcePath(string path)
+        {
+            ModifyConfigs(path, (c, s) => c.SourcePath = path);
+        }
+
         public void ModifyConfigs<T>(T value, Action<Config, T> action)
         {
         	foreach (var config in List)
